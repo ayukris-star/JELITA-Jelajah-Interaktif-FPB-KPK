@@ -1,0 +1,1613 @@
+```html
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <title>🌳 JELITA: Jelajah FPB dan KPK - Petualangan Alam Matematika Kelas 5</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts: Fredoka & Nunito -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            taman: {
+              sky: '#e0f2fe',
+              cloud: '#ffffff',
+              grass: '#10b981',
+              leaf: '#059669',
+              wood: '#92400e',
+              dirt: '#d97706'
+            }
+          },
+          fontFamily: {
+            fredoka: ['Fredoka', 'Comic Sans MS', 'Quicksand', 'sans-serif'],
+            nunito: ['Nunito', 'Segoe UI', 'Roboto', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Global scrollbar and base aesthetics */
+    * {
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body {
+      font-family: 'Nunito', 'Segoe UI', sans-serif;
+      background-color: #e0f2fe; /* Sky Blue Base */
+      color: #1e293b; 
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+    h1, h2, h3, .font-fun {
+      font-family: 'Fredoka', 'Nunito', sans-serif;
+    }
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-track { background: #bae6fd; }
+    ::-webkit-scrollbar-thumb { background: #38bdf8; border-radius: 999px; border: 2px solid #bae6fd; }
+    
+    /* Animations */
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-10px) rotate(2deg); }
+    }
+    @keyframes pulseGlow {
+      0%, 100% { filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.4)); }
+      50% { filter: drop-shadow(0 0 20px rgba(251, 191, 36, 0.8)); }
+    }
+    @keyframes shakeCard {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px) rotate(-2deg); }
+      40%, 80% { transform: translateX(6px) rotate(2deg); }
+    }
+    @keyframes popIn {
+      0% { transform: scale(0.5); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .animate-float { animation: floatSlow 3.5s ease-in-out infinite; }
+    .animate-glow { animation: pulseGlow 2.5s infinite; }
+    .animate-shake { animation: shakeCard 0.4s ease-in-out; }
+    .animate-pop { animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+    
+    /* Garden Background Pattern */
+    .garden-bg {
+      background-image: 
+        radial-gradient(circle at 15% 50px, #ffffff 15px, transparent 16px),
+        radial-gradient(circle at 80% 100px, #ffffff 25px, transparent 26px),
+        linear-gradient(to bottom, #e0f2fe 0%, #bae6fd 40%, #a7f3d0 100%);
+      background-attachment: fixed;
+    }
+
+    /* Drag & Drop Zones */
+    .drop-zone { transition: all 0.25s ease; border: 3px dashed #10b981; }
+    .drop-zone.dragover { background-color: #d1fae5; transform: scale(1.02); border-color: #fbbf24; }
+    .draggable-card { cursor: grab; user-select: none; transition: transform 0.2s, box-shadow 0.2s; }
+    .draggable-card:active { cursor: grabbing; transform: scale(1.05); }
+
+    /* Buttons */
+    button, .btn-action { min-height: 48px; min-width: 48px; display: inline-flex; align-items: center; justify-content: center; }
+    
+    /* Detektif Camera View Mirroring */
+    .mirror-video { transform: scaleX(-1); }
+
+    /* Fix for smooth transitions */
+    .transition-all { transition-property: all; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 500ms; }
+  </style>
+</head>
+<body class="garden-bg flex flex-col justify-between selection:bg-emerald-500 selection:text-white">
+
+  <!-- ========================================================
+       SPLASH SCREEN
+  ======================================================== -->
+  <div id="splashScreen" class="fixed inset-0 z-50 bg-gradient-to-b from-sky-300 via-sky-200 to-emerald-300 flex flex-col items-center justify-center p-6 text-center transition-opacity duration-700">
+    <div class="relative mb-6">
+      <div class="w-32 h-32 md:w-44 md:h-44 rounded-full bg-white animate-glow flex items-center justify-center p-1 shadow-2xl border-4 border-emerald-400">
+        <div class="w-full h-full bg-sky-100 rounded-full flex flex-col items-center justify-center relative overflow-hidden">
+          <span class="text-6xl md:text-7xl animate-bounce">🌳</span>
+        </div>
+      </div>
+      <span class="absolute -bottom-2 -right-2 bg-emerald-500 text-white text-xs md:text-sm font-bold px-3 py-1 rounded-full shadow-lg border-2 border-white">KELAS 5 SD</span>
+    </div>
+    
+    <h1 class="text-3xl md:text-5xl font-bold font-fun text-teal-900 mb-2 tracking-wide drop-shadow-sm flex flex-col items-center gap-1">
+      <span class="text-emerald-600 text-2xl md:text-3xl tracking-widest font-black uppercase bg-white/50 px-4 py-1 rounded-2xl shadow-sm border border-emerald-200">Jelita</span>
+      <span>JELAJAH FPB DAN KPK</span>
+    </h1>
+    <p class="text-emerald-800 text-sm md:text-base mb-6 max-w-md font-semibold">
+      “Petualangan Seru Menaklukkan Dunia Faktor dan Kelipatan di Taman Bermain”
+    </p>
+
+    <!-- Progress -->
+    <div class="w-64 md:w-80 bg-white border-2 border-sky-400 rounded-full h-6 p-1 mb-3 overflow-hidden shadow-inner">
+      <div id="splashProgressBar" class="h-full bg-gradient-to-r from-sky-400 to-emerald-400 rounded-full transition-all duration-300" style="width: 0%;"></div>
+    </div>
+    <p id="splashProgressText" class="text-xs font-bold text-sky-900 mb-6">Menyiapkan Perlengkapan Taman... 0%</p>
+
+    <button id="btnStartAdventure" onclick="app.launchAdventure()" class="hidden px-8 py-4 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white font-black text-lg md:text-xl rounded-2xl shadow-xl border-b-4 border-teal-700 transform hover:scale-105 active:translate-y-1 active:border-b-0 transition-all">
+      <i class="fa-solid fa-play mr-3"></i> MULAI PETUALANGAN!
+    </button>
+  </div>
+
+  <!-- ========================================================
+       TOP HEADER & NAVIGATION BAR
+  ======================================================== -->
+  <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-sky-200 px-3 py-2.5 md:px-6 md:py-3 shadow-sm">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-3 cursor-pointer" onclick="app.navigate('beranda')">
+        <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white text-xl shadow-md border-2 border-white">🌳</div>
+        <div>
+          <div class="text-base md:text-xl font-bold font-fun leading-tight text-teal-800 flex items-center gap-2">
+            JELITA: FPB & KPK <span class="hidden sm:inline-block text-[10px] bg-sky-100 text-sky-700 px-2 py-0.5 rounded-full border border-sky-200 font-bold">SD KELAS 5</span>
+          </div>
+          <p class="text-[11px] text-emerald-600 font-semibold hidden md:block">Taman Belajar Faktor dan Kelipatan</p>
+        </div>
+      </div>
+
+      <div class="hidden lg:flex items-center gap-3 bg-sky-50 border border-sky-200 px-4 py-1.5 rounded-full shadow-inner">
+        <span class="text-xs font-bold text-sky-700 flex items-center gap-1"><i class="fa-solid fa-map-location-dot"></i> Rute:</span>
+        <div class="w-36 bg-slate-200 h-3 rounded-full overflow-hidden shadow-inner">
+          <div id="globalProgressFill" class="bg-gradient-to-r from-sky-400 to-emerald-400 h-full transition-all duration-500" style="width: 0%;"></div>
+        </div>
+        <span id="globalProgressText" class="text-xs font-mono font-black text-emerald-700">0%</span>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button id="soundToggleBtn" onclick="sound.toggle()" class="w-11 h-11 rounded-xl bg-white hover:bg-sky-50 border border-sky-200 text-sky-500 transition-all shadow-sm">
+          <i id="soundIcon" class="fa-solid fa-volume-high text-lg"></i>
+        </button>
+        <button onclick="app.openBadgesModal()" class="w-11 h-11 rounded-xl bg-white hover:bg-amber-50 border border-amber-200 text-amber-500 relative transition-all shadow-sm">
+          <i class="fa-solid fa-award text-lg"></i>
+          <span id="badgeCounter" class="absolute -top-1 -right-1 bg-rose-500 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow">0</span>
+        </button>
+        <button onclick="app.openGuideModal()" class="hidden sm:flex px-3.5 py-2 rounded-xl bg-white hover:bg-sky-50 border border-sky-200 text-sky-700 text-xs font-bold items-center gap-2 transition-all shadow-sm">
+          <i class="fa-solid fa-book-open"></i> Panduan
+        </button>
+        <button onclick="app.toggleMobileMenu()" class="lg:hidden w-11 h-11 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white transition-all shadow-md">
+          <i class="fa-solid fa-bars text-lg"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer Overlay Menu -->
+  <div id="mobileDrawer" class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm hidden lg:hidden flex justify-end">
+    <div class="w-72 sm:w-80 bg-white border-l border-sky-200 h-full p-5 flex flex-col justify-between overflow-y-auto shadow-2xl">
+      <div>
+        <div class="flex items-center justify-between pb-4 mb-4 border-b border-sky-100">
+          <div class="flex items-center gap-2">
+            <span class="text-2xl">🗺️</span>
+            <span class="font-bold font-fun text-teal-800 text-lg">Peta Taman</span>
+          </div>
+          <button onclick="app.toggleMobileMenu()" class="w-9 h-9 rounded-lg bg-slate-100 text-slate-500">
+            <i class="fa-solid fa-xmark text-lg"></i>
+          </button>
+        </div>
+        <nav class="flex flex-col gap-2" id="mobileNavLinks"></nav>
+      </div>
+      <div class="pt-4 border-t border-sky-100">
+        <p class="text-xs text-center text-sky-700 font-bold mb-1">SDN Srondol Kulon 01</p>
+      </div>
+    </div>
+  </div>
+
+  <main class="flex-grow max-w-7xl w-full mx-auto p-3 sm:p-5 md:p-6 mb-20 lg:mb-4">
+
+    <!-- ========================================================
+         VIEW: BERANDA (HOME)
+    ======================================================== -->
+    <section id="view-beranda" class="app-view space-y-8 animate-fade">
+      <div class="relative bg-white/80 backdrop-blur-md rounded-3xl p-6 md:p-10 border border-white shadow-xl overflow-hidden">
+        <div class="absolute -right-10 -bottom-10 w-72 h-72 bg-emerald-200/50 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <div class="lg:col-span-7 space-y-4 text-center lg:text-left">
+            <div class="inline-flex items-center gap-2 bg-sky-100 border border-sky-200 px-3 py-1 rounded-full text-sky-700 text-xs font-bold shadow-sm">
+              <i class="fa-solid fa-sun animate-spin-slow"></i> Posko Penjelajah Alam
+            </div>
+            <h1 class="text-3xl md:text-5xl font-extrabold font-fun text-slate-800 leading-tight">
+              Taklukkan Dunia <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-sky-500">FPB & KPK!</span>
+            </h1>
+            <p class="text-slate-600 text-sm md:text-base leading-relaxed font-semibold">
+              Halo Teman-teman! Selamat datang di aplikasi <strong>JELITA</strong>. Bersama <strong class="text-sky-600">Raka</strong> dan <strong class="text-pink-500">Sinta</strong>, mari berlari menjelajahi taman bilangan, melompati batu kelipatan, dan memetik apel faktor terhebat!
+            </p>
+            <div class="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-2">
+              <button onclick="app.navigate('tujuan')" class="btn-action px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white font-bold rounded-2xl shadow-lg border-b-4 border-teal-600 active:translate-y-1 active:border-b-0 transition-all">
+                <i class="fa-solid fa-map mr-2"></i> Mulai Dari Misi
+              </button>
+            </div>
+          </div>
+
+          <div class="lg:col-span-5 flex items-center justify-center gap-4 sm:gap-6">
+            <div class="flex flex-col items-center animate-float">
+              <div class="w-28 h-28 sm:w-36 sm:h-36 rounded-3xl bg-gradient-to-tr from-sky-400 to-blue-300 p-1.5 shadow-xl transform rotate-[-2deg]">
+                <div class="w-full h-full bg-sky-50 rounded-[20px] flex items-center justify-center overflow-hidden border-2 border-white relative">
+                  <div class="text-6xl">👦</div>
+                  <div class="absolute bottom-1 bg-sky-600/90 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">Raka</div>
+                </div>
+              </div>
+            </div>
+            <div class="flex flex-col items-center animate-float" style="animation-delay: 1.5s;">
+              <div class="w-28 h-28 sm:w-36 sm:h-36 rounded-3xl bg-gradient-to-tr from-pink-400 to-rose-300 p-1.5 shadow-xl transform rotate-[2deg]">
+                <div class="w-full h-full bg-pink-50 rounded-[20px] flex items-center justify-center overflow-hidden border-2 border-white relative">
+                  <div class="text-6xl">👧</div>
+                  <div class="absolute bottom-1 bg-pink-500/90 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">Sinta</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <h2 class="text-2xl font-bold font-fun text-teal-900 flex items-center gap-2">🗺️ Peta Jelajah Taman Matematika</h2>
+            <p class="text-slate-600 font-semibold text-xs sm:text-sm">Klik area di bawah ini untuk memulai setiap pos pembelajaran!</p>
+          </div>
+          <div class="bg-white border border-emerald-200 px-4 py-2 rounded-2xl flex items-center gap-3 shadow-sm">
+            <span class="text-xs font-bold text-emerald-700">Rute Selesai:</span>
+            <div class="w-32 bg-slate-100 h-3.5 rounded-full overflow-hidden shadow-inner">
+              <div id="homeProgressFill" class="bg-gradient-to-r from-sky-400 to-emerald-400 h-full transition-all duration-500" style="width: 0%;"></div>
+            </div>
+            <span id="homeProgressText" class="text-xs font-extrabold text-slate-800">0%</span>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4" id="planetMapGrid"></div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         VIEW: 1. TUJUAN MISI
+    ======================================================== -->
+    <section id="view-tujuan" class="app-view hidden space-y-6 animate-fade">
+      <div class="bg-white/90 backdrop-blur-sm border-2 border-sky-200 rounded-3xl p-6 md:p-8 shadow-xl">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-sky-100">
+          <div>
+            <span class="text-xs font-black text-sky-700 bg-sky-100 px-3 py-1 rounded-full border border-sky-200">POS 1 • TAMAN BUNGA</span>
+            <h1 class="text-2xl md:text-3xl font-extrabold font-fun text-slate-800 mt-2">🎯 MISI PETUALANGAN</h1>
+            <p class="text-emerald-600 text-sm font-bold">“Apa yang akan kamu kuasai hari ini?”</p>
+          </div>
+        </div>
+        <div class="mt-6 bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 rounded-2xl p-4 shadow-sm">
+          <p class="text-slate-700 text-sm md:text-base leading-relaxed font-semibold">
+            “Pada akhir pembelajaran, murid mampu memahami konsep <strong>faktor, kelipatan, faktor persekutuan, kelipatan persekutuan, FPB, dan KPK</strong> serta menggunakannya untuk menyelesaikan masalah dalam kehidupan sehari-hari.”
+          </p>
+        </div>
+        <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-3" id="tujuanCardsContainer"></div>
+        <div class="mt-8 flex justify-between items-center pt-4 border-t border-sky-100">
+          <button onclick="app.navigate('beranda')" class="btn-action px-4 py-2.5 rounded-xl bg-white text-slate-600 hover:bg-slate-50 border border-slate-300 font-bold">Kembali</button>
+          <button onclick="app.completeStep('tujuan'); app.navigate('kpk')" class="btn-action px-6 py-3 bg-sky-500 hover:bg-sky-400 text-white font-black rounded-xl shadow-md border-b-4 border-sky-600">Lanjut ke KPK 🐸</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         VIEW: 2. KPK
+    ======================================================== -->
+    <section id="view-kpk" class="app-view hidden space-y-8 animate-fade">
+      <div class="bg-white/90 backdrop-blur-sm border-2 border-emerald-200 rounded-3xl p-6 md:p-8 shadow-xl">
+        <div class="flex items-center gap-3">
+          <span class="text-4xl">🐸</span>
+          <div>
+            <span class="text-xs font-black text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full border border-emerald-200">POS 2 • KOLAM KATAK</span>
+            <h1 class="text-2xl md:text-3xl font-extrabold font-fun text-slate-800 mt-1">MENGENAL KELIPATAN & KPK</h1>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white border border-emerald-200 rounded-3xl p-6 space-y-6 shadow-sm">
+        <h2 class="text-xl font-bold font-fun text-slate-800 border-b border-emerald-100 pb-3">1. Konsep Kelipatan Bilangan</h2>
+        <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-2xl">
+          <p class="text-emerald-900 font-semibold"><strong>Kelipatan suatu bilangan</strong> adalah hasil perkalian bilangan tersebut dengan bilangan asli (1, 2, 3, ...).</p>
+        </div>
+
+        <!-- Horizontal Number Line 0-24 -->
+        <div class="bg-sky-50/50 p-4 rounded-2xl border border-sky-200 shadow-inner">
+          <div class="flex justify-between items-center mb-4 border-b border-sky-200 pb-3">
+            <div class="text-sm font-extrabold text-sky-800 flex items-center gap-2"><span class="text-xl">🐸</span> Katak Melompat Kelipatan 4</div>
+            <div class="flex gap-2">
+              <button onclick="kpkLesson.prevHop()" class="px-3 py-1.5 bg-white border border-sky-300 rounded-lg text-sky-700 font-bold text-xs shadow-sm hover:bg-sky-100 transition-colors">Mundur</button>
+              <button onclick="kpkLesson.nextHop()" class="px-4 py-1.5 bg-sky-500 hover:bg-sky-400 text-white rounded-lg font-bold text-xs shadow-sm transition-colors border-b-2 border-sky-700">Lompat +4</button>
+              <button onclick="kpkLesson.resetHop()" class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 rounded-lg text-slate-700 font-bold text-xs transition-colors"><i class="fa-solid fa-rotate-right"></i> Reset</button>
+            </div>
+          </div>
+          
+          <div class="overflow-x-auto pb-4 pt-6 scrollbar-hide">
+            <div class="min-w-[1200px] flex items-end relative" id="kpkNumberLineTrack">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+          
+          <div id="kpkJumpDetails" class="mt-4 text-sm font-bold text-slate-700 bg-white p-4 rounded-xl border border-sky-100 text-center shadow-sm flex flex-col md:flex-row items-center justify-center gap-2"></div>
+        </div>
+      </div>
+
+      <div class="bg-white border border-emerald-200 rounded-3xl p-6 space-y-6 shadow-sm">
+        <h2 class="text-xl font-bold font-fun text-slate-800 border-b border-emerald-100 pb-3">2. Kelipatan Persekutuan & KPK</h2>
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="bg-sky-50 p-4 rounded-2xl border border-sky-200">
+            <div class="text-xs font-bold text-sky-700 mb-2">Kelipatan 4:</div>
+            <div class="flex gap-2 font-mono font-bold text-sm">
+              <span class="px-2 py-1 bg-white rounded border">4</span><span class="px-2 py-1 bg-white rounded border">8</span>
+              <span class="px-2 py-1 bg-amber-300 text-amber-900 rounded border-amber-400 shadow animate-pulse ring-2 ring-amber-300">12</span>
+              <span class="px-2 py-1 bg-white rounded border">16</span><span class="px-2 py-1 bg-white rounded border">20</span>
+              <span class="px-2 py-1 bg-amber-300 text-amber-900 rounded border-amber-400 shadow animate-pulse ring-2 ring-amber-300">24</span>
+            </div>
+          </div>
+          <div class="bg-pink-50 p-4 rounded-2xl border border-pink-200">
+            <div class="text-xs font-bold text-pink-700 mb-2">Kelipatan 6:</div>
+            <div class="flex gap-2 font-mono font-bold text-sm">
+              <span class="px-2 py-1 bg-white rounded border">6</span>
+              <span class="px-2 py-1 bg-amber-300 text-amber-900 rounded border-amber-400 shadow animate-pulse ring-2 ring-amber-300">12</span>
+              <span class="px-2 py-1 bg-white rounded border">18</span>
+              <span class="px-2 py-1 bg-amber-300 text-amber-900 rounded border-amber-400 shadow animate-pulse ring-2 ring-amber-300">24</span>
+              <span class="px-2 py-1 bg-white rounded border">30</span>
+            </div>
+          </div>
+        </div>
+        <div class="bg-amber-100 border-2 border-amber-300 rounded-2xl p-4 text-center">
+          <p class="text-amber-900 font-bold">Angka persekutuan terkecil (KPK) dari 4 dan 6 adalah <span class="text-2xl font-black bg-white px-3 py-1 rounded-xl shadow ml-2">12</span></p>
+        </div>
+      </div>
+
+      <div class="flex justify-between items-center pt-4">
+        <button onclick="app.navigate('tujuan')" class="btn-action px-4 py-2.5 rounded-xl bg-white text-slate-600 font-bold shadow-sm">Kembali</button>
+        <button onclick="app.completeStep('kpk'); app.navigate('fpb')" class="btn-action px-6 py-3 bg-emerald-500 text-white font-black rounded-xl shadow-md border-b-4 border-emerald-600">Lanjut ke FPB 🍎</button>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         VIEW: 3. FPB
+    ======================================================== -->
+    <section id="view-fpb" class="app-view hidden space-y-8 animate-fade">
+      <div class="bg-white/90 backdrop-blur-sm border-2 border-rose-200 rounded-3xl p-6 md:p-8 shadow-xl">
+        <div class="flex items-center gap-3">
+          <span class="text-4xl">🍎</span>
+          <div>
+            <span class="text-xs font-black text-rose-700 bg-rose-100 px-3 py-1 rounded-full border border-rose-200">POS 3 • KEBUN APEL</span>
+            <h1 class="text-2xl md:text-3xl font-extrabold font-fun text-slate-800 mt-1">MENGENAL FAKTOR & FPB</h1>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white border border-rose-200 rounded-3xl p-6 space-y-6 shadow-sm">
+        <h2 class="text-xl font-bold font-fun text-slate-800 border-b border-rose-100 pb-3">1. Konsep Faktor (Membagi Habis)</h2>
+        <p class="text-sm font-semibold text-slate-600">Faktor adalah bilangan yang membagi habis bilangan lain tanpa sisa.</p>
+        
+        <div class="bg-rose-50 p-5 rounded-2xl border border-rose-200 shadow-inner">
+          <div class="flex gap-2 mb-4 overflow-x-auto pb-2">
+            <button onclick="fpbLesson.setGrouping(1)" class="whitespace-nowrap px-3 py-1.5 bg-white rounded-lg text-xs font-bold border shadow-sm hover:bg-slate-50">Bagi 1</button>
+            <button onclick="fpbLesson.setGrouping(2)" class="whitespace-nowrap px-3 py-1.5 bg-white rounded-lg text-xs font-bold border shadow-sm hover:bg-slate-50">Bagi 2</button>
+            <button onclick="fpbLesson.setGrouping(3)" class="whitespace-nowrap px-3 py-1.5 bg-white rounded-lg text-xs font-bold border shadow-sm hover:bg-slate-50">Bagi 3</button>
+            <button onclick="fpbLesson.setGrouping(5)" class="whitespace-nowrap px-3 py-1.5 bg-red-100 text-red-700 rounded-lg text-xs font-bold border border-red-200 shadow-sm hover:bg-red-200">Bagi 5 (Coba)</button>
+          </div>
+          <div id="fpbGemContainer" class="min-h-[120px] bg-white p-4 rounded-xl border flex flex-col gap-3 items-center"></div>
+          <div id="fpbGroupingExplanation" class="text-sm font-bold text-center mt-4 bg-white py-2 rounded border"></div>
+        </div>
+      </div>
+
+      <div class="bg-white border border-rose-200 rounded-3xl p-6 space-y-6 shadow-sm">
+        <h2 class="text-xl font-bold font-fun text-slate-800 border-b border-rose-100 pb-3">2. Faktor Persekutuan Terbesar (FPB)</h2>
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="bg-sky-50 p-4 rounded-2xl border border-sky-200">
+            <div class="text-xs font-bold text-sky-700 mb-2">Faktor 12:</div>
+            <div class="flex flex-wrap gap-2 font-mono font-bold text-sm">
+              <span class="px-2 py-1 bg-amber-300 text-amber-900 rounded border border-amber-400">1</span>
+              <span class="px-2 py-1 bg-amber-300 text-amber-900 rounded border border-amber-400">2</span>
+              <span class="px-2 py-1 bg-amber-300 text-amber-900 rounded border border-amber-400">3</span>
+              <span class="px-2 py-1 bg-white rounded border">4</span>
+              <span class="px-2 py-1 bg-emerald-400 text-white rounded border-emerald-500 shadow ring-2 ring-emerald-300 animate-pulse">6 👑</span>
+              <span class="px-2 py-1 bg-white rounded border">12</span>
+            </div>
+          </div>
+          <div class="bg-emerald-50 p-4 rounded-2xl border border-emerald-200">
+            <div class="text-xs font-bold text-emerald-700 mb-2">Faktor 18:</div>
+            <div class="flex flex-wrap gap-2 font-mono font-bold text-sm">
+              <span class="px-2 py-1 bg-amber-300 text-amber-900 rounded border border-amber-400">1</span>
+              <span class="px-2 py-1 bg-amber-300 text-amber-900 rounded border border-amber-400">2</span>
+              <span class="px-2 py-1 bg-amber-300 text-amber-900 rounded border border-amber-400">3</span>
+              <span class="px-2 py-1 bg-emerald-400 text-white rounded border-emerald-500 shadow ring-2 ring-emerald-300 animate-pulse">6 👑</span>
+              <span class="px-2 py-1 bg-white rounded border">9</span>
+              <span class="px-2 py-1 bg-white rounded border">18</span>
+            </div>
+          </div>
+        </div>
+        <div class="bg-emerald-100 border-2 border-emerald-300 rounded-2xl p-4 text-center">
+          <p class="text-emerald-900 font-bold">Faktor persekutuan (sama) terbesar (FPB) dari 12 dan 18 adalah <span class="text-2xl font-black bg-white px-3 py-1 rounded-xl shadow ml-2 text-emerald-600">6</span></p>
+        </div>
+      </div>
+
+      <div class="flex justify-between items-center pt-4">
+        <button onclick="app.navigate('kpk')" class="btn-action px-4 py-2.5 rounded-xl bg-white text-slate-600 font-bold shadow-sm">Kembali</button>
+        <button onclick="app.completeStep('fpb'); app.navigate('lab')" class="btn-action px-6 py-3 bg-rose-500 text-white font-black rounded-xl shadow-md border-b-4 border-rose-600">Lanjut ke Lab 🧪</button>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         VIEW: 4. MATH LAB SIMULASI
+    ======================================================== -->
+    <section id="view-lab" class="app-view hidden space-y-6 animate-fade">
+      <div class="bg-white/90 backdrop-blur-sm border-2 border-sky-300 rounded-3xl p-6 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <span class="text-4xl">🏕️</span>
+          <div>
+            <span class="text-xs font-black text-sky-700 bg-sky-100 px-3 py-1 rounded-full border border-sky-200">POS 4 • TENDA LAB</span>
+            <h1 class="text-2xl font-extrabold font-fun text-slate-800">LABORATORIUM ALAM</h1>
+          </div>
+        </div>
+        <div class="flex gap-2 bg-slate-100 p-1.5 rounded-2xl border">
+          <button id="tabBtnLabKpk" onclick="labApp.switchTab('kpk')" class="px-4 py-2 rounded-xl text-xs font-bold bg-sky-500 text-white shadow transition-all">🐸 Lab KPK</button>
+          <button id="tabBtnLabFpb" onclick="labApp.switchTab('fpb')" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-500 hover:bg-slate-200 transition-all">🍎 Lab FPB</button>
+        </div>
+      </div>
+
+      <!-- LAB KPK -->
+      <div id="labTabContentKpk" class="bg-white border-2 border-sky-200 rounded-3xl p-6 shadow-sm space-y-6">
+        <div class="flex justify-between items-center border-b border-sky-100 pb-4">
+          <div>
+            <h3 class="text-lg font-bold text-slate-800">🧺 Kumpulkan Kelipatan Target</h3>
+            <p class="text-xs text-slate-500">Ketuk/klik kartu angka kelipatan untuk memunculkan perkaliannya!</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <select id="kpkTargetSelect" onchange="labApp.initKpkGame()" class="bg-white border-2 border-sky-200 text-sm font-bold rounded-xl px-2 py-1.5 focus:outline-none focus:border-sky-500">
+              <option value="4" selected>Kelipatan 4</option>
+              <option value="6">Kelipatan 6</option>
+              <option value="7">Kelipatan 7</option>
+            </select>
+            <button onclick="labApp.initKpkGame()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 rounded-xl text-xs font-bold transition-colors"><i class="fa-solid fa-rotate"></i> Acak</button>
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-12 gap-6">
+          <div class="md:col-span-5 bg-sky-50 border-2 border-dashed border-sky-400 p-5 rounded-2xl text-center flex flex-col justify-between min-h-[220px]" id="kpkBasketDropZone">
+            <h4 class="font-bold text-sky-800 text-sm bg-white py-1 px-3 rounded-full border shadow-sm self-center" id="kpkBasketFormula">Kelipatan (n × ...)</h4>
+            <div id="kpkCollectedItems" class="flex flex-wrap justify-center gap-2 my-4"></div>
+            <div class="bg-white px-3 py-1.5 rounded-full text-xs font-bold text-sky-700 border shadow-sm self-center">Terkumpul: <span id="kpkScoreIndicator" class="text-lg">0/6</span></div>
+          </div>
+          <div class="md:col-span-7 bg-white p-5 rounded-2xl border shadow-sm">
+            <div id="kpkMultiplicationToast" class="mb-4 p-3 rounded-xl bg-slate-50 border border-slate-200 text-sm font-mono font-bold text-sky-700 text-center transition-all h-12 flex items-center justify-center">Klik kartu untuk menguji perkalian</div>
+            <div id="kpkCardsPool" class="grid grid-cols-3 sm:grid-cols-4 gap-3"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LAB FPB -->
+      <div id="labTabContentFpb" class="hidden bg-white border-2 border-emerald-200 rounded-3xl p-6 shadow-sm space-y-6">
+        <div class="flex justify-between items-center border-b border-emerald-100 pb-4">
+          <div>
+            <h3 class="text-lg font-bold text-slate-800">🍎 Petik Apel Faktor</h3>
+            <p class="text-xs text-slate-500">Ketuk/klik apel untuk menguji pembagiannya!</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <select id="fpbTargetSelect" onchange="labApp.initFpbGame()" class="bg-white border-2 border-emerald-200 text-sm font-bold rounded-xl px-2 py-1.5 focus:outline-none focus:border-emerald-500">
+              <option value="12" selected>Faktor 12</option>
+              <option value="18">Faktor 18</option>
+              <option value="24">Faktor 24</option>
+            </select>
+            <button onclick="labApp.initFpbGame()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 rounded-xl text-xs font-bold transition-colors"><i class="fa-solid fa-rotate"></i> Acak</button>
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-12 gap-6">
+          <div class="md:col-span-5 bg-emerald-50 border-2 border-dashed border-emerald-400 p-5 rounded-2xl text-center flex flex-col justify-between min-h-[220px]" id="fpbBasketDropZone">
+            <h4 class="font-bold text-emerald-800 text-sm bg-white py-1 px-3 rounded-full border shadow-sm self-center" id="fpbBasketTitle">Faktor Target</h4>
+            <div id="fpbPairMultiplication" class="text-xs font-mono font-bold text-emerald-800 mt-2 space-y-1"></div>
+            <div id="fpbCollectedApples" class="flex flex-wrap justify-center gap-2 my-4"></div>
+            <div class="bg-white px-3 py-1.5 rounded-full text-xs font-bold text-emerald-700 border shadow-sm self-center">Faktor: <span id="fpbScoreIndicator" class="text-lg">0/6</span></div>
+          </div>
+          <div class="md:col-span-7 bg-white p-5 rounded-2xl border shadow-sm">
+            <div id="fpbDivisionToast" class="mb-4 p-3 rounded-xl bg-slate-50 border border-slate-200 text-sm font-mono font-bold text-emerald-700 text-center transition-all h-12 flex items-center justify-center">Klik apel untuk menguji pembagian</div>
+            <div id="fpbApplePool" class="grid grid-cols-3 sm:grid-cols-4 gap-3"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-between items-center pt-4">
+        <button onclick="app.navigate('fpb')" class="btn-action px-4 py-2.5 rounded-xl bg-white text-slate-600 font-bold shadow-sm">Kembali</button>
+        <button onclick="app.completeStep('lab'); app.navigate('kuis')" class="btn-action px-6 py-3 bg-blue-500 hover:bg-blue-400 text-white font-black rounded-xl shadow-md border-b-4 border-blue-600">Lanjut ke Kuis Balap 🏁</button>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         VIEW: 5. KUIS BALAP KATAK 4 PEMAIN
+    ======================================================== -->
+    <section id="view-kuis" class="app-view hidden space-y-6 animate-fade">
+      <div class="bg-white/90 backdrop-blur-sm border-2 border-amber-300 rounded-3xl p-6 shadow-xl flex items-center gap-3">
+        <span class="text-4xl">🏆</span>
+        <div>
+          <span class="text-xs font-black text-amber-700 bg-amber-100 px-3 py-1 rounded-full border border-amber-200">POS 5 • ARENA BALAP</span>
+          <h1 class="text-2xl font-extrabold font-fun text-slate-800">KUIS BALAP KATAK (4 PEMAIN)</h1>
+        </div>
+      </div>
+
+      <div id="raceSetupPanel" class="bg-white border border-slate-200 rounded-3xl p-8 text-center space-y-6 shadow-sm max-w-2xl mx-auto">
+        <h2 class="text-xl font-bold font-fun text-slate-800">Siapa Penjelajah Tercepat? (Masukkan 1 - 4 Pemain)</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+          <input id="pName1" type="text" value="Raka" class="bg-emerald-50 border-2 border-emerald-200 font-bold text-emerald-800 rounded-xl px-3 py-3 text-center shadow-inner focus:outline-none focus:border-emerald-500">
+          <input id="pName2" type="text" value="Sinta" class="bg-sky-50 border-2 border-sky-200 font-bold text-sky-800 rounded-xl px-3 py-3 text-center shadow-inner focus:outline-none focus:border-sky-500">
+          <input id="pName3" type="text" value="Budi" class="bg-rose-50 border-2 border-rose-200 font-bold text-rose-800 rounded-xl px-3 py-3 text-center shadow-inner focus:outline-none focus:border-rose-500">
+          <input id="pName4" type="text" value="Ayu" class="bg-amber-50 border-2 border-amber-200 font-bold text-amber-800 rounded-xl px-3 py-3 text-center shadow-inner focus:outline-none focus:border-amber-500">
+        </div>
+        <button onclick="raceApp.startRace()" class="btn-action px-8 py-4 bg-amber-500 text-white font-black text-xl rounded-2xl shadow-lg border-b-4 border-amber-600 hover:scale-105 active:scale-95 transition-transform">
+          🏁 MULAI BALAPAN!
+        </button>
+      </div>
+
+      <div id="raceTrackArena" class="hidden space-y-6">
+        <div class="bg-white border-2 border-slate-300 rounded-3xl p-5 shadow-md">
+          <div class="flex justify-between items-center mb-4 border-b pb-2">
+            <h3 class="font-bold text-slate-800 flex items-center gap-2">🏁 Papan Peringkat Langsung</h3>
+            <button onclick="raceApp.resetToSetup()" class="px-4 py-1.5 bg-slate-100 hover:bg-slate-200 rounded-lg text-xs font-bold text-slate-600 transition-colors">Ulangi</button>
+          </div>
+          <div id="liveRaceLanesContainer" class="space-y-4 relative z-10 px-2"></div>
+        </div>
+
+        <div class="bg-blue-50 px-4 py-2.5 rounded-2xl border border-blue-200 text-xs sm:text-sm text-blue-800 font-bold flex items-center justify-center gap-2 shadow-inner">
+          <span>🎮</span> Layar Terbagi 4: Sentuh/klik jawaban di kolom masing-masing secara bersamaan!
+        </div>
+        <div id="simultaneousRaceColumns" class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4"></div>
+      </div>
+
+      <div id="racePodiumBanner" class="hidden bg-gradient-to-b from-amber-100 to-white border-2 border-amber-300 rounded-3xl p-8 text-center space-y-6 shadow-xl relative overflow-hidden">
+        <div class="absolute inset-0 pointer-events-none opacity-20 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9IiNjY2MiLz48L3N2Zz4=')]"></div>
+        <div class="text-6xl animate-bounce relative z-10">🏆</div>
+        <h2 class="text-3xl font-extrabold font-fun text-slate-800 relative z-10">PAPAN PERINGKAT AKHIR</h2>
+        <div id="racePodiumCardsList" class="grid grid-cols-2 lg:grid-cols-4 gap-4 max-w-4xl mx-auto text-left relative z-10"></div>
+        <div class="flex justify-center gap-4 pt-6 relative z-10">
+          <button onclick="raceApp.resetToSetup()" class="px-6 py-3 bg-white font-bold rounded-2xl border-2 border-slate-200 shadow-sm hover:bg-slate-50">Main Ulang</button>
+          <button onclick="app.completeStep('kuis'); app.navigate('detektif')" class="px-6 py-3 bg-indigo-500 hover:bg-indigo-400 text-white font-black rounded-2xl shadow-md border-b-4 border-indigo-600 transition-colors">Lanjut ke Detektif Gerak 🕵️</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         VIEW: 6. GIM DETEKTIF GERAK (ZOOM OUT + PEMBAHASAN IMERSIF)
+    ======================================================== -->
+    <section id="view-detektif" class="app-view hidden space-y-6 animate-fade">
+      <div class="bg-white/90 backdrop-blur-sm border-2 border-emerald-300 rounded-3xl p-6 shadow-xl flex items-center gap-3">
+        <span class="text-4xl">🕵️</span>
+        <div>
+          <span class="text-xs font-black text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full border border-emerald-200">POS 6 • TAMAN GERAK</span>
+          <h1 class="text-2xl font-extrabold font-fun text-slate-800">GIM DETEKTIF GERAK</h1>
+          <p class="text-xs font-semibold text-slate-500 mt-1">Kamera membaca posisimu! Bergeserlah ke kiri atau kanan layar untuk memilih jawaban.</p>
+        </div>
+      </div>
+
+      <!-- Detektif Setup / Intro -->
+      <div id="detektifSetupPanel" class="bg-white border border-slate-200 rounded-3xl p-8 text-center space-y-5 shadow-sm max-w-2xl mx-auto">
+        <div class="text-6xl">📷</div>
+        <h2 class="text-xl font-bold font-fun text-slate-800">Siap Menjadi Detektif Alam?</h2>
+        <p class="text-sm font-semibold text-slate-600">Pastikan kamu berada di tempat yang terang. Saat soal muncul, kamera akan menyala penuh. <strong>Segera geser badanmu</strong> ke area warna jawaban yang benar di layar sebelum waktu 10 detik habis!</p>
+        <button onclick="detectiveApp.startCameraAndGame()" class="btn-action px-8 py-3 bg-emerald-500 text-white font-black text-lg rounded-2xl shadow-lg border-b-4 border-emerald-600 hover:scale-105 active:scale-95 transition-transform">
+          AKTIFKAN KAMERA & MULAI!
+        </button>
+        <p class="text-[10px] text-slate-400 mt-4">*(Bila kamera tidak didukung, kamu tetap bisa klik area zona di layar secara manual)</p>
+      </div>
+
+      <!-- Detektif Active Game Area (IMMERSIVE FULLSCREEN CAMERA) -->
+      <div id="detektifGameArea" class="hidden relative w-full h-[75vh] min-h-[500px] rounded-3xl overflow-hidden shadow-2xl border-4 border-emerald-300 bg-slate-900">
+        
+        <!-- Fullscreen Video Background -->
+        <video id="detektifVideo" class="absolute inset-0 w-full h-full object-cover mirror-video" autoplay playsinline muted></video>
+
+        <!-- Top Status Bar -->
+        <div class="absolute top-4 left-0 right-0 flex justify-center z-40 pointer-events-none px-4">
+          <div class="bg-white/95 backdrop-blur-md px-6 py-2 rounded-full shadow-lg border-2 border-emerald-200 flex items-center gap-4 text-sm font-bold text-slate-700 w-auto max-w-full">
+            <span class="hidden sm:inline">🕵️ DETEKTIF GERAK</span>
+            <span class="bg-sky-100 text-sky-800 px-3 py-1 rounded-full border border-sky-200" id="detektifQNum">SOAL 1/10</span>
+            <span class="bg-amber-100 text-amber-800 px-3 py-1 rounded-full border border-amber-200">⭐ <span id="detektifScore">0</span> POIN</span>
+          </div>
+        </div>
+
+        <!-- Question Bar (Will zoom out) -->
+        <div id="detektifQuestionBar" class="absolute top-16 left-0 right-0 flex justify-center z-40 px-4 transition-all duration-700 transform origin-top">
+          <div class="bg-white/95 backdrop-blur-md px-6 py-4 rounded-3xl shadow-2xl border-4 border-emerald-300 max-w-4xl w-full text-center">
+             <div id="detektifNarrator" class="text-[11px] sm:text-sm font-bold text-slate-500 mb-1">🔍 Detektif, temukan zona jawabanmu!</div>
+             <div id="detektifQuestionText" class="text-base sm:text-xl md:text-2xl font-extrabold text-slate-800 leading-tight">Memuat soal...</div>
+          </div>
+        </div>
+
+        <!-- Center Divider -->
+        <div class="absolute inset-y-0 left-1/2 w-1.5 bg-white/60 transform -translate-x-1/2 z-10 border-x border-white/20 border-dashed"></div>
+
+        <!-- Left Zone (Biru) -->
+        <div id="detektifZoneLeft" class="absolute inset-y-0 left-0 w-1/2 flex flex-col justify-center items-center z-20 transition-all duration-700 bg-blue-500/20 hover:bg-blue-500/30 cursor-pointer p-2 sm:p-4" onclick="detectiveApp.forceZone('KIRI')">
+          <h2 class="text-white drop-shadow-md text-lg md:text-2xl font-black mb-4 tracking-widest opacity-90 hidden sm:block">ZONA KIRI</h2>
+          <div id="detektifAnsLeft" class="bg-white/95 px-4 py-4 md:px-10 md:py-8 rounded-2xl text-blue-800 text-2xl md:text-5xl font-black shadow-xl border-4 border-blue-300 text-center w-full max-w-[90%] break-words transition-all duration-700 transform origin-center">8</div>
+          
+          <!-- Result & Explanation Container Left -->
+          <div id="detektifResultLeft" class="hidden flex-col items-center mt-4 w-full max-w-[90%] bg-white/95 rounded-2xl p-4 md:p-6 shadow-2xl border-4 border-emerald-400 transform translate-y-10 opacity-0 transition-all duration-700 max-h-[55vh] overflow-y-auto scrollbar-hide">
+            <div class="text-2xl md:text-4xl animate-bounce mb-1">👏👏👏</div>
+            <h3 class="font-black text-emerald-600 text-lg md:text-xl uppercase tracking-wider text-center">JAWABAN BENAR</h3>
+            <div class="bg-emerald-50 p-3 md:p-4 rounded-xl border border-emerald-200 text-xs md:text-sm font-semibold text-slate-700 text-left w-full mt-3 shadow-inner">
+              <div class="text-emerald-800 font-bold mb-2 flex items-center gap-2"><i class="fa-solid fa-lightbulb text-amber-500"></i> Mengapa?</div>
+              <div id="detektifExpLeft" class="whitespace-pre-line leading-relaxed">Penjelasan</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Zone (Oranye) -->
+        <div id="detektifZoneRight" class="absolute inset-y-0 right-0 w-1/2 flex flex-col justify-center items-center z-20 transition-all duration-700 bg-orange-500/20 hover:bg-orange-500/30 cursor-pointer p-2 sm:p-4" onclick="detectiveApp.forceZone('KANAN')">
+          <h2 class="text-white drop-shadow-md text-lg md:text-2xl font-black mb-4 tracking-widest opacity-90 hidden sm:block">ZONA KANAN</h2>
+          <div id="detektifAnsRight" class="bg-white/95 px-4 py-4 md:px-10 md:py-8 rounded-2xl text-orange-800 text-2xl md:text-5xl font-black shadow-xl border-4 border-orange-300 text-center w-full max-w-[90%] break-words transition-all duration-700 transform origin-center">12</div>
+          
+          <!-- Result & Explanation Container Right -->
+          <div id="detektifResultRight" class="hidden flex-col items-center mt-4 w-full max-w-[90%] bg-white/95 rounded-2xl p-4 md:p-6 shadow-2xl border-4 border-emerald-400 transform translate-y-10 opacity-0 transition-all duration-700 max-h-[55vh] overflow-y-auto scrollbar-hide">
+            <div class="text-2xl md:text-4xl animate-bounce mb-1">👏👏👏</div>
+            <h3 class="font-black text-emerald-600 text-lg md:text-xl uppercase tracking-wider text-center">JAWABAN BENAR</h3>
+            <div class="bg-emerald-50 p-3 md:p-4 rounded-xl border border-emerald-200 text-xs md:text-sm font-semibold text-slate-700 text-left w-full mt-3 shadow-inner">
+              <div class="text-emerald-800 font-bold mb-2 flex items-center gap-2"><i class="fa-solid fa-lightbulb text-amber-500"></i> Mengapa?</div>
+              <div id="detektifExpRight" class="whitespace-pre-line leading-relaxed">Penjelasan</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Body Position Tracker -->
+        <div id="detektifTracker" class="absolute w-8 h-8 md:w-12 md:h-12 bg-yellow-400 rounded-full shadow-[0_0_20px_rgba(250,204,21,1)] border-4 border-white transform -translate-x-1/2 -translate-y-1/2 transition-all duration-150 pointer-events-none z-30" style="left: 50%; top: 50%;"></div>
+
+        <!-- Timer Center Bottom -->
+        <div id="detektifTimerContainer" class="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-40 transition-all duration-500">
+           <div id="detektifTimer" class="w-16 h-16 sm:w-20 sm:h-20 bg-rose-500 rounded-full flex items-center justify-center text-3xl sm:text-4xl font-black text-white shadow-[0_0_20px_rgba(244,63,94,0.6)] border-4 border-white">10</div>
+        </div>
+
+        <!-- Central STOP Overlay -->
+        <div id="detektifStopOverlay" class="absolute inset-0 bg-slate-900/70 z-50 hidden flex items-center justify-center pointer-events-none backdrop-blur-sm">
+           <h1 class="text-7xl md:text-9xl font-black text-yellow-400 drop-shadow-[0_5px_10px_rgba(0,0,0,0.8)] animate-pop">STOP!</h1>
+        </div>
+
+        <!-- Next Button Overlay (Fixed at bottom) -->
+        <div id="detektifNextOverlay" class="absolute bottom-4 left-0 right-0 flex justify-center z-50 hidden transform transition-all duration-500 translate-y-10 opacity-0">
+           <button onclick="detectiveApp.nextQuestion()" class="px-8 py-3 bg-sky-500 text-white font-black text-lg md:text-xl rounded-2xl shadow-[0_6px_0_#0284c7] hover:translate-y-1 hover:shadow-[0_3px_0_#0284c7] active:translate-y-2 active:shadow-none transition-all pointer-events-auto border-2 border-white">
+             Tantangan Berikutnya ➔
+           </button>
+        </div>
+      </div>
+
+      <!-- Hidden canvas for processing frame -->
+      <canvas id="detektifCanvas" class="hidden"></canvas>
+
+      <!-- Detektif End Screen -->
+      <div id="detektifEndScreen" class="hidden bg-white border border-slate-200 rounded-3xl p-8 text-center space-y-6 shadow-sm max-w-2xl mx-auto">
+        <div class="text-6xl animate-bounce">🏅</div>
+        <h2 class="text-3xl font-extrabold font-fun text-sky-800">MISI DETEKTIF SELESAI!</h2>
+        <p class="text-slate-600 font-bold text-lg">Total Skor Akhir: <span id="detektifFinalScore" class="text-4xl text-emerald-600 font-black">0</span></p>
+        <div class="flex justify-center gap-4 pt-6 border-t border-slate-100">
+          <button onclick="detectiveApp.resetToSetup()" class="px-6 py-3 bg-slate-100 font-bold rounded-2xl border shadow-sm text-slate-600 hover:bg-slate-200 transition-colors">Main Lagi (Soal Diacak)</button>
+          <button onclick="app.completeStep('detektif'); app.navigate('evaluasi')" class="px-6 py-3 bg-purple-500 hover:bg-purple-400 text-white font-black rounded-2xl shadow-md border-b-4 border-purple-600 transition-colors">Lanjut ke Evaluasi 📝</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         VIEW: 7. EVALUASI (20 SOAL)
+    ======================================================== -->
+    <section id="view-evaluasi" class="app-view hidden space-y-6 animate-fade">
+      <div class="bg-white/90 backdrop-blur-sm border-2 border-purple-200 rounded-3xl p-6 shadow-xl flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <span class="text-4xl">📝</span>
+          <div>
+            <span class="text-xs font-black text-purple-700 bg-purple-100 px-3 py-1 rounded-full border border-purple-200">POS 7 • POS PENJAGA</span>
+            <h1 class="text-2xl font-extrabold font-fun text-slate-800 mt-1">MISI EVALUASI</h1>
+          </div>
+        </div>
+        <div class="bg-purple-50 px-4 py-2 rounded-2xl border border-purple-200 text-center">
+          <span class="text-xs font-semibold text-slate-500">Soal:</span>
+          <span id="evalCounter" class="text-lg font-mono font-black text-purple-800">1 / 20</span>
+        </div>
+      </div>
+
+      <div id="evalActiveCard" class="bg-white border rounded-3xl p-6 md:p-8 space-y-6 shadow-md">
+        <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden border"><div id="evalProgressBar" class="h-full bg-purple-400 transition-all duration-300" style="width: 5%;"></div></div>
+        <div>
+          <h2 id="evalQuestionText" class="text-lg md:text-xl font-bold text-slate-800 leading-relaxed">Memuat soal...</h2>
+        </div>
+        <div id="evalOptionsList" class="space-y-3 pt-2"></div>
+        <div class="flex items-center justify-between pt-6 border-t">
+          <button id="btnPrevEval" onclick="evalApp.prevQuestion()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 rounded-xl font-bold text-slate-600 transition-colors">Sebelumnya</button>
+          <button id="btnNextEval" onclick="evalApp.nextQuestion()" class="px-6 py-2.5 bg-purple-500 hover:bg-purple-400 text-white font-black rounded-xl border-b-4 border-purple-600 transition-colors">Selanjutnya ➔</button>
+        </div>
+      </div>
+
+      <div id="evalResultCard" class="hidden space-y-6">
+        <div class="bg-white border-2 border-purple-300 rounded-3xl p-6 md:p-10 text-center space-y-6 shadow-xl relative overflow-hidden">
+          <div class="text-6xl animate-bounce">🎉</div>
+          <h2 class="text-3xl md:text-4xl font-extrabold font-fun text-slate-800">EVALUASI SELESAI!</h2>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
+            <div class="bg-sky-50 p-4 rounded-2xl border border-sky-200">Skor<br><span id="evalScoreVal" class="text-3xl font-black text-sky-700">0/100</span></div>
+            <div class="bg-emerald-50 p-4 rounded-2xl border border-emerald-200">Benar<br><span id="evalCorrectCount" class="text-3xl font-black text-emerald-600">0</span></div>
+            <div class="bg-rose-50 p-4 rounded-2xl border border-rose-200">Salah<br><span id="evalWrongCount" class="text-3xl font-black text-rose-600">0</span></div>
+            <div class="bg-amber-50 p-4 rounded-2xl border border-amber-200">Persentase<br><span id="evalPercentageVal" class="text-3xl font-black text-amber-600">0%</span></div>
+          </div>
+          <p id="evalFeedbackText" class="text-lg font-bold text-slate-700 mt-4 bg-slate-50 p-3 rounded-xl inline-block border shadow-sm"></p>
+          <div class="flex justify-center pt-6">
+            <button onclick="app.completeStep('evaluasi'); app.navigate('refleksi')" class="px-8 py-4 bg-emerald-500 text-white font-black text-lg rounded-2xl border-b-4 border-emerald-600 hover:scale-105 transition-transform">Lanjut ke Refleksi 💭</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         VIEW: 8. REFLEKSI
+    ======================================================== -->
+    <section id="view-refleksi" class="app-view hidden space-y-6 animate-fade">
+      <div class="bg-white/90 backdrop-blur-sm border-2 border-teal-200 rounded-3xl p-6 shadow-xl flex items-center gap-3">
+        <span class="text-4xl">💭</span>
+        <div>
+          <span class="text-xs font-black text-teal-700 bg-teal-100 px-3 py-1 rounded-full border border-teal-200">POS 8 • GAZEBO TAMAN</span>
+          <h1 class="text-2xl font-extrabold font-fun text-slate-800">REFLEKSI PETUALANGAN</h1>
+        </div>
+      </div>
+      <div class="bg-white border border-slate-200 rounded-3xl p-6 md:p-8 shadow-sm space-y-6">
+        <div>
+          <label class="font-bold block mb-3 text-lg text-slate-700">1. Bagaimana perasaanmu belajar hari ini?</label>
+          <div class="grid grid-cols-5 gap-2 md:gap-4 max-w-2xl" id="reflectionMoodGroup">
+            <button onclick="reflectionApp.setMood(this)" class="mood-btn p-3 md:p-4 bg-slate-50 rounded-2xl border-2 border-slate-200 text-3xl md:text-4xl hover:bg-slate-100 transition-all">😄</button>
+            <button onclick="reflectionApp.setMood(this)" class="mood-btn p-3 md:p-4 bg-slate-50 rounded-2xl border-2 border-slate-200 text-3xl md:text-4xl hover:bg-slate-100 transition-all">🙂</button>
+            <button onclick="reflectionApp.setMood(this)" class="mood-btn p-3 md:p-4 bg-slate-50 rounded-2xl border-2 border-slate-200 text-3xl md:text-4xl hover:bg-slate-100 transition-all">😐</button>
+            <button onclick="reflectionApp.setMood(this)" class="mood-btn p-3 md:p-4 bg-slate-50 rounded-2xl border-2 border-slate-200 text-3xl md:text-4xl hover:bg-slate-100 transition-all">😕</button>
+            <button onclick="reflectionApp.setMood(this)" class="mood-btn p-3 md:p-4 bg-slate-50 rounded-2xl border-2 border-slate-200 text-3xl md:text-4xl hover:bg-slate-100 transition-all">😣</button>
+          </div>
+        </div>
+        <div class="pt-4">
+          <button onclick="reflectionApp.submit()" class="px-8 py-3 bg-teal-500 hover:bg-teal-400 text-white font-black rounded-xl border-b-4 border-teal-600 transition-colors">Kirim Refleksi 💌</button>
+        </div>
+        <div id="reflectionSuccessAlert" class="hidden p-4 bg-emerald-50 text-emerald-700 font-bold rounded-xl border border-emerald-200 shadow-inner flex items-center gap-3">
+          <span class="text-2xl">🌟</span> Terima kasih sudah berbagi pengalaman belajarmu!
+        </div>
+        <div class="pt-6 border-t border-slate-100 flex justify-between items-center">
+          <button onclick="app.navigate('evaluasi')" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 rounded-xl font-bold text-slate-600 transition-colors">Kembali</button>
+          <button onclick="app.completeStep('refleksi'); app.navigate('profil')" class="px-6 py-3 bg-blue-500 hover:bg-blue-400 text-white font-black rounded-xl border-b-4 border-blue-600 transition-colors">Lanjut Profil 👩‍🏫</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         VIEW: 9. PROFIL PENGEMBANG
+    ======================================================== -->
+    <section id="view-profil" class="app-view hidden space-y-6 animate-fade">
+      <div class="bg-white border-2 border-sky-200 rounded-3xl p-6 md:p-10 shadow-sm space-y-8 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-emerald-50 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20"></div>
+        <div class="flex items-center gap-3 border-b border-sky-100 pb-4 relative z-10">
+          <span class="text-4xl">👩‍🏫</span>
+          <h1 class="text-2xl font-extrabold font-fun text-slate-800">PROFIL PENGEMBANG</h1>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center relative z-10">
+          <div class="md:col-span-4 flex justify-center">
+            <div class="w-56 h-72 rounded-3xl bg-gradient-to-tr from-emerald-300 to-sky-300 p-2 shadow-xl transform rotate-[-2deg] hover:rotate-0 transition-transform duration-300 relative">
+              <div class="w-full h-full bg-slate-100 rounded-[20px] overflow-hidden border-4 border-white relative">
+                <img id="devProfileImg" src="https://i.imgur.com/CKcvZZG.jpg" alt="Ayu Kristiyaningsih" class="w-full h-full object-cover object-top transition-all duration-300 hover:scale-105">
+              </div>
+            </div>
+          </div>
+          
+          <div class="md:col-span-8 space-y-6">
+            <div>
+              <h2 class="text-3xl font-extrabold font-fun text-slate-800">Ayu Kristiyaningsih, S.Pd.</h2>
+              <p class="text-slate-600 font-bold mt-2 flex items-center gap-2"><i class="fa-solid fa-school text-emerald-500 text-lg"></i>Guru Kelas 5 • SD Negeri Srondol Kulon 01</p>
+            </div>
+
+            <!-- Official Badges -->
+            <div class="grid grid-cols-2 md:grid-cols-2 gap-3">
+              <div class="flex items-center gap-3 p-3 bg-sky-50 rounded-2xl border border-sky-200 shadow-sm hover:-translate-y-1 transition-transform">
+                <div class="text-xl">🌟</div><div class="text-xs sm:text-sm font-bold text-sky-900 leading-tight">Guru Duta Canva Indonesia</div>
+              </div>
+              <div class="flex items-center gap-3 p-3 bg-pink-50 rounded-2xl border border-pink-200 shadow-sm hover:-translate-y-1 transition-transform">
+                <div class="text-xl">🌸</div><div class="text-xs sm:text-sm font-bold text-pink-900 leading-tight">Wardah Inspiring Teacher</div>
+              </div>
+              <div class="flex items-center gap-3 p-3 bg-emerald-50 rounded-2xl border border-emerald-200 shadow-sm hover:-translate-y-1 transition-transform">
+                <div class="text-xl">🎨</div><div class="text-xs sm:text-sm font-bold text-emerald-900 leading-tight">Guru Konten Kreator Jateng</div>
+              </div>
+              <div class="flex items-center gap-3 p-3 bg-purple-50 rounded-2xl border border-purple-200 shadow-sm hover:-translate-y-1 transition-transform">
+                <div class="text-xl">⚡</div><div class="text-xs sm:text-sm font-bold text-purple-900 leading-tight">Quizizz Supertrainer</div>
+              </div>
+            </div>
+
+            <!-- Social Media -->
+            <div>
+              <span class="text-xs font-black text-slate-500 uppercase block mb-3 tracking-wider">Terhubung Bersama Saya:</span>
+              <div class="flex flex-wrap gap-3">
+                <a href="https://instagram.com/ayu.kris" target="_blank" class="flex items-center gap-2 bg-gradient-to-r from-purple-100 to-pink-100 text-pink-700 px-4 py-2 rounded-xl text-sm font-bold border border-pink-200 hover:shadow-md transition-shadow"><i class="fa-brands fa-instagram text-lg"></i> @ayu.kris</a>
+                <a href="https://facebook.com/search/top?q=Ayu%20Kristiyaningsih" target="_blank" class="flex items-center gap-2 bg-blue-50 text-blue-700 px-4 py-2 rounded-xl text-sm font-bold border border-blue-200 hover:shadow-md transition-shadow"><i class="fa-brands fa-facebook text-lg"></i> Ayu Kristiyaningsih</a>
+                <a href="https://tiktok.com/@ayukris98" target="_blank" class="flex items-center gap-2 bg-slate-100 text-slate-800 px-4 py-2 rounded-xl text-sm font-bold border border-slate-300 hover:shadow-md transition-shadow"><i class="fa-brands fa-tiktok text-lg"></i> ayukris98</a>
+                <a href="https://youtube.com/@ayukris98" target="_blank" class="flex items-center gap-2 bg-red-50 text-red-700 px-4 py-2 rounded-xl text-sm font-bold border border-red-200 hover:shadow-md transition-shadow"><i class="fa-brands fa-youtube text-lg"></i> ayukris98</a>
+              </div>
+            </div>
+
+            <div class="bg-amber-50 border-l-4 border-amber-400 p-5 rounded-r-2xl italic text-sm md:text-base font-semibold text-slate-700 shadow-inner">
+              “Belajar matematika bukan hanya tentang menemukan jawaban, tetapi tentang menemukan cara untuk berpikir.”
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-between items-center pt-6 border-t border-sky-100 relative z-10">
+          <button onclick="app.navigate('refleksi')" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 rounded-xl font-bold text-slate-600 transition-colors">Kembali</button>
+          <button onclick="app.completeStep('profil'); app.navigate('selesai')" class="px-8 py-4 bg-amber-500 hover:bg-amber-400 text-white font-black text-lg rounded-2xl shadow-lg border-b-4 border-amber-600 hover:-translate-y-1 transition-transform">Selesaikan Misi! 🏆</button>
+        </div>
+        <p class="text-center text-xs text-slate-400 mt-8 relative z-10 font-semibold">© 2026 JELITA - Jelajah FPB dan KPK</p>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         VIEW: 10. SELESAI
+    ======================================================== -->
+    <section id="view-selesai" class="app-view hidden space-y-6 animate-fade">
+      <div class="bg-white border-4 border-emerald-400 rounded-3xl p-10 text-center space-y-6 shadow-2xl relative overflow-hidden">
+        <canvas id="confettiCanvas" class="absolute inset-0 w-full h-full pointer-events-none"></canvas>
+        <div class="relative z-10">
+          <div class="text-7xl animate-bounce">👑</div>
+          <h1 class="text-4xl md:text-5xl font-extrabold font-fun text-slate-800 mt-4">PETUALANGAN SELESAI!</h1>
+          <p class="text-emerald-700 font-bold mt-2 text-lg">Selamat, Penjelajah Alam Hebat!</p>
+          <p class="text-sm text-slate-600 font-semibold max-w-xl mx-auto mt-4">Matematika bukan tentang siapa yang paling cepat menemukan jawaban, tetapi tentang bagaimana kita menemukan cara yang tepat untuk memecahkan masalah.</p>
+          <div id="finishBadgesList" class="flex flex-wrap justify-center gap-4 mt-8"></div>
+          <div class="flex justify-center gap-4 mt-10">
+            <button onclick="app.resetAdventure()" class="px-6 py-3 bg-slate-100 hover:bg-slate-200 font-bold rounded-2xl border shadow-sm transition-colors">Main Lagi dari Awal</button>
+            <button onclick="app.navigate('beranda')" class="px-8 py-3 bg-emerald-500 hover:bg-emerald-400 text-white font-black rounded-2xl shadow-md border-b-4 border-emerald-600 hover:scale-105 transition-transform">Kembali ke Beranda 🏠</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    /* ========================================================
+       AUDIO SYNTHESIZER (WEB AUDIO API OFFLINE)
+    ======================================================== */
+    class CosmicAudio {
+      constructor() { this.ctx = null; this.enabled = true; }
+      init() { if (!this.ctx && (window.AudioContext || window.webkitAudioContext)) { this.ctx = new (window.AudioContext || window.webkitAudioContext)(); } if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume(); }
+      toggle() { this.enabled = !this.enabled; document.getElementById('soundIcon').className = this.enabled ? 'fa-solid fa-volume-high text-lg text-sky-500' : 'fa-solid fa-volume-xmark text-lg text-rose-500'; if(this.enabled) this.playPop(); }
+      playPop() { if(!this.enabled)return; this.init(); try{const o=this.ctx.createOscillator(),g=this.ctx.createGain();o.type='sine';o.frequency.setValueAtTime(450,this.ctx.currentTime);o.frequency.exponentialRampToValueAtTime(800,this.ctx.currentTime+0.08);g.gain.setValueAtTime(0.1,this.ctx.currentTime);g.gain.exponentialRampToValueAtTime(0.01,this.ctx.currentTime+0.08);o.connect(g);g.connect(this.ctx.destination);o.start();o.stop(this.ctx.currentTime+0.08);}catch(e){} }
+      playHop() { if(!this.enabled)return; this.init(); try{const o=this.ctx.createOscillator(),g=this.ctx.createGain();o.type='sine';o.frequency.setValueAtTime(300,this.ctx.currentTime);o.frequency.exponentialRampToValueAtTime(600,this.ctx.currentTime+0.12);g.gain.setValueAtTime(0.1,this.ctx.currentTime);g.gain.exponentialRampToValueAtTime(0.01,this.ctx.currentTime+0.12);o.connect(g);g.connect(this.ctx.destination);o.start();o.stop(this.ctx.currentTime+0.12);}catch(e){} }
+      playCorrect() { if(!this.enabled)return; this.init(); try{const n=this.ctx.currentTime;[523.25, 659.25, 1046.50].forEach((f,i)=>{const o=this.ctx.createOscillator(),g=this.ctx.createGain();o.type='triangle';o.frequency.setValueAtTime(f,n+i*0.08);g.gain.setValueAtTime(0.1,n+i*0.08);g.gain.exponentialRampToValueAtTime(0.01,n+i*0.08+0.2);o.connect(g);g.connect(this.ctx.destination);o.start(n+i*0.08);o.stop(n+i*0.08+0.2);});}catch(e){} }
+      playWrong() { if(!this.enabled)return; this.init(); try{const o=this.ctx.createOscillator(),g=this.ctx.createGain();o.type='sawtooth';o.frequency.setValueAtTime(150,this.ctx.currentTime);o.frequency.exponentialRampToValueAtTime(100,this.ctx.currentTime+0.2);g.gain.setValueAtTime(0.1,this.ctx.currentTime);g.gain.exponentialRampToValueAtTime(0.01,this.ctx.currentTime+0.2);o.connect(g);g.connect(this.ctx.destination);o.start();o.stop(this.ctx.currentTime+0.2);}catch(e){} }
+      playVictory() { if(!this.enabled)return; this.init(); try{const n=this.ctx.currentTime;[440, 554.37, 659.25, 880].forEach((f,i)=>{const o=this.ctx.createOscillator(),g=this.ctx.createGain();o.type='triangle';o.frequency.setValueAtTime(f,n+i*0.1);g.gain.setValueAtTime(0.15,n+i*0.1);g.gain.exponentialRampToValueAtTime(0.01,n+i*0.1+0.3);o.connect(g);g.connect(this.ctx.destination);o.start(n+i*0.1);o.stop(n+i*0.1+0.3);});}catch(e){} }
+      playApplause() { 
+        if(!this.enabled)return; this.init(); 
+        try {
+          for(let i=0; i<6; i++) {
+            setTimeout(() => {
+              const n = this.ctx.currentTime;
+              [400 + Math.random()*200, 600 + Math.random()*200, 800 + Math.random()*200].forEach(f => {
+                const o = this.ctx.createOscillator(); const g = this.ctx.createGain();
+                o.type = 'square'; o.frequency.setValueAtTime(f, n);
+                g.gain.setValueAtTime(0.05, n); g.gain.exponentialRampToValueAtTime(0.001, n+0.1);
+                o.connect(g); g.connect(this.ctx.destination); o.start(n); o.stop(n+0.1);
+              });
+            }, i * 120);
+          }
+          this.playVictory();
+        } catch(e){}
+      }
+    }
+    const sound = new CosmicAudio();
+  </script>
+
+  <script>
+    /* ========================================================
+       CORE APP & NAVIGATION (TEMA TAMAN)
+    ======================================================== */
+    const app = {
+      progress: 0,
+      completedSteps: { tujuan:false, kpk:false, fpb:false, lab:false, kuis:false, detektif:false, evaluasi:false, refleksi:false, profil:false },
+      planets: [
+        { id: 'tujuan', name: 'Taman Bunga', title: '🎯 Tujuan Misi', icon: '🌻' },
+        { id: 'kpk', name: 'Kolam Katak', title: '🐸 Dunia KPK', icon: '🐸' },
+        { id: 'fpb', name: 'Kebun Apel', title: '🍎 Dunia FPB', icon: '🍎' },
+        { id: 'lab', name: 'Tenda Lab', title: '🏕️ Lab Simulasi', icon: '🏕️' },
+        { id: 'kuis', name: 'Arena Balap', title: '🏆 Kuis Balap', icon: '🏁' },
+        { id: 'detektif', name: 'Taman Gerak', title: '🕵️ Detektif Gerak', icon: '📷' },
+        { id: 'evaluasi', name: 'Pos Penjaga', title: '📝 Evaluasi', icon: '🏡' },
+        { id: 'refleksi', name: 'Gazebo', title: '💭 Refleksi', icon: '💭' },
+        { id: 'profil', name: 'Rumah Pohon', title: '👩‍🏫 Profil Guru', icon: '🌳' }
+      ],
+      badges: [
+        { id: 'badge-kpk', title: '🏅 Penjelajah Kelipatan', unlocked: false, icon: '🌟' },
+        { id: 'badge-fpb', title: '🏅 Detektif Faktor', unlocked: false, icon: '🔍' },
+        { id: 'badge-lab', title: '🏅 Ilmuwan Alam', unlocked: false, icon: '🧪' },
+        { id: 'badge-kuis', title: '🏅 Jagoan Hitung', unlocked: false, icon: '⚡' },
+        { id: 'badge-detektif', title: '🏅 Detektif Cilik', unlocked: false, icon: '📷' },
+        { id: 'badge-master', title: '🏆 Master FPB & KPK', unlocked: false, icon: '👑' }
+      ],
+      init() {
+        this.renderPlanets();
+        this.renderTujuanCards();
+        this.simulateSplash();
+      },
+      simulateSplash() {
+        let p = 0;
+        const intv = setInterval(() => {
+          p += 15; if (p >= 100) { p = 100; clearInterval(intv); document.getElementById('btnStartAdventure').classList.remove('hidden'); }
+          document.getElementById('splashProgressBar').style.width = p + '%';
+          document.getElementById('splashProgressText').innerText = `Menyiapkan Taman... ${p}%`;
+        }, 150);
+      },
+      launchAdventure() {
+        sound.playVictory(); document.getElementById('splashScreen').style.opacity = '0';
+        setTimeout(() => document.getElementById('splashScreen').classList.add('hidden'), 700);
+      },
+      navigate(id) {
+        sound.playPop();
+        document.querySelectorAll('.app-view').forEach(v => v.classList.add('hidden'));
+        const el = document.getElementById(`view-${id}`);
+        if(el) { el.classList.remove('hidden'); window.scrollTo(0,0); }
+        if(id === 'detektif' && typeof detectiveApp.resetToSetup === 'function') detectiveApp.resetToSetup();
+        if(id === 'selesai') this.renderFinishBadges();
+      },
+      completeStep(step) {
+        if(!this.completedSteps[step]) {
+          this.completedSteps[step] = true;
+          this.updateProgress(); sound.playCorrect();
+          // Badges map
+          if(step==='kpk') this.badges[0].unlocked = true;
+          if(step==='fpb') this.badges[1].unlocked = true;
+          if(step==='lab') this.badges[2].unlocked = true;
+          if(step==='kuis') this.badges[3].unlocked = true;
+          if(step==='detektif') this.badges[4].unlocked = true;
+          if(step==='evaluasi') this.badges[5].unlocked = true;
+          this.updateBadgeCounter();
+        }
+      },
+      updateProgress() {
+        const d = Object.values(this.completedSteps).filter(Boolean).length;
+        const p = Math.round((d / 9) * 100);
+        document.getElementById('globalProgressFill').style.width = p+'%'; document.getElementById('globalProgressText').innerText = p+'%';
+        document.getElementById('homeProgressFill').style.width = p+'%'; document.getElementById('homeProgressText').innerText = p+'%';
+        this.renderPlanets();
+      },
+      updateBadgeCounter() {
+        const c = this.badges.filter(b=>b.unlocked).length;
+        const el = document.getElementById('badgeCounter');
+        el.innerText = c;
+        if(c>0) { el.classList.add('animate-bounce'); setTimeout(()=>el.classList.remove('animate-bounce'), 2000); }
+      },
+      renderPlanets() {
+        document.getElementById('planetMapGrid').innerHTML = this.planets.map((p, i) => `
+          <div onclick="app.navigate('${p.id}')" class="bg-white border rounded-3xl p-4 cursor-pointer hover:-translate-y-1 hover:shadow-md transition-all duration-300 ${this.completedSteps[p.id] ? 'ring-4 ring-emerald-300 shadow-sm' : ''}">
+            <div class="text-4xl mb-1">${p.icon}</div>
+            <div class="text-[10px] font-black text-sky-600 uppercase tracking-wide bg-sky-50 inline-block px-2 py-0.5 rounded-full mb-2">Pos ${i+1}</div>
+            <h3 class="font-bold text-slate-800 leading-tight">${p.title}</h3>
+            ${this.completedSteps[p.id] ? '<div class="absolute top-3 right-3 text-emerald-500 bg-white rounded-full"><i class="fa-solid fa-circle-check"></i></div>' : ''}
+          </div>`).join('');
+      },
+      renderTujuanCards() {
+        const txts = ["Konsep faktor","Faktor persekutuan","FPB","Konsep kelipatan","Kelipatan persekutuan","KPK","Masalah nyata FPB & KPK"];
+        document.getElementById('tujuanCardsContainer').innerHTML = txts.map(t => `<div class="bg-sky-50 p-3 rounded-xl border border-sky-200 text-sm font-bold text-slate-700 flex gap-3 items-center"><div class="w-6 h-6 rounded-full bg-sky-200 flex items-center justify-center text-sky-700 flex-shrink-0"><i class="fa-solid fa-check text-xs"></i></div> ${t}</div>`).join('');
+      },
+      renderFinishBadges() {
+        document.getElementById('finishBadgesList').innerHTML = this.badges.map(b => b.unlocked ? `
+          <div class="bg-amber-50 border border-amber-200 p-3 rounded-2xl flex flex-col items-center gap-1 shadow-sm w-32">
+            <span class="text-3xl">${b.icon}</span><span class="text-[10px] font-bold text-amber-800 text-center leading-tight">${b.title}</span>
+          </div>` : '').join('');
+        setTimeout(runConfetti, 500);
+      },
+      resetAdventure() { location.reload(); }
+    };
+  </script>
+
+  <script>
+    /* ========================================================
+       KPK & FPB MATERI LESSONS (HORIZONTAL LINE)
+    ======================================================== */
+    const kpkLesson = {
+      step: 1, max: 6, mult: 4,
+      render() {
+        let h = '';
+        for(let i=0; i<=24; i++) {
+          const isL = i === (this.step*this.mult);
+          const isP = i>0 && i%(this.mult)===0 && i < (this.step*this.mult);
+          h += `
+            <div class="flex flex-col items-center min-w-[48px] relative transition-all duration-300 ${isL?'z-10':''}">
+              <div class="h-12 flex items-end justify-center pb-2 w-full">
+                ${isL?'<div class="text-4xl animate-bounce transform -translate-y-2 drop-shadow-md">🐸</div>':isP?'<div class="text-xl opacity-60">🐾</div>':''}
+              </div>
+              <div class="w-10 h-10 rounded-full border-4 flex items-center justify-center text-sm font-black transition-all shadow-sm
+                  ${isL?'bg-amber-300 border-amber-500 text-amber-900 scale-125 ring-4 ring-amber-100'
+                  :isP?'bg-emerald-200 border-emerald-400 text-emerald-800'
+                  :'bg-slate-100 border-slate-300 text-slate-500'}">
+                ${i}
+              </div>
+            </div>
+            ${i<24 ? '<div class="w-full h-1 bg-slate-300 absolute bottom-5 left-[50%] -z-10"></div>' : ''}
+          `;
+        }
+        document.getElementById('kpkNumberLineTrack').innerHTML = h;
+        document.getElementById('kpkJumpDetails').innerHTML = `
+          <span class="text-emerald-700 bg-emerald-50 px-3 py-1 rounded-lg border border-emerald-200">Lompatan ke-${this.step}</span>
+          <span>Melompati <strong>4 batu</strong> → mendarat di batu <strong>${this.step*this.mult}</strong></span>
+          <span class="font-mono font-black text-sky-700 ml-2 bg-sky-50 px-3 py-1 rounded-lg border border-sky-200">4 × ${this.step} = ${this.step*this.mult}</span>
+        `;
+      },
+      nextHop() { if(this.step<this.max) { this.step++; sound.playHop(); this.render(); } },
+      prevHop() { if(this.step>1) { this.step--; sound.playHop(); this.render(); } },
+      resetHop() { this.step=1; sound.playPop(); this.render(); }
+    };
+
+    const fpbLesson = {
+      setGrouping(r) {
+        sound.playHop();
+        const c = document.getElementById('fpbGemContainer'); const e = document.getElementById('fpbGroupingExplanation');
+        c.innerHTML = '';
+        if(r===5) {
+          e.innerHTML = '<span class="text-rose-600 flex items-center justify-center gap-2"><i class="fa-solid fa-xmark-circle text-lg"></i> 12 dibagi 5 = 2 sisa 2, maka 5 BUKAN FAKTOR dari 12.</span>';
+          c.innerHTML = `<div class="flex gap-2 bg-slate-50 p-3 border-2 border-slate-200 rounded-xl shadow-sm text-xl">🍎🍎🍎🍎🍎</div><div class="flex gap-2 bg-slate-50 p-3 border-2 border-slate-200 rounded-xl shadow-sm text-xl">🍎🍎🍎🍎🍎</div><div class="text-sm text-rose-600 font-black mt-2 bg-rose-50 px-3 py-1 rounded border border-rose-200">Sisa: 🍎🍎</div>`;
+        } else {
+          const cols = 12/r;
+          e.innerHTML = `<span class="text-emerald-700 flex items-center justify-center gap-2"><i class="fa-solid fa-check-circle text-lg"></i> 12 dibagi ${r} = ${cols} (Tanpa Sisa). Maka ${r} ADALAH FAKTOR dari 12.</span>`;
+          for(let i=0; i<r; i++) c.innerHTML += `<div class="flex gap-2 bg-amber-50 p-3 border-2 border-amber-300 rounded-xl shadow-sm text-xl">${'🍎'.repeat(cols)}</div>`;
+        }
+      }
+    };
+  </script>
+
+  <script>
+    /* ========================================================
+       MATH LAB SIMULASI (INTERAKTIF PENJELASAN)
+    ======================================================== */
+    const labApp = {
+      switchTab(t) {
+        sound.playPop();
+        document.getElementById('labTabContentKpk').classList.toggle('hidden', t!=='kpk');
+        document.getElementById('labTabContentFpb').classList.toggle('hidden', t!=='fpb');
+        document.getElementById('tabBtnLabKpk').className = t==='kpk' ? 'px-4 py-2 rounded-xl text-xs font-bold bg-sky-500 text-white shadow transition-all' : 'px-4 py-2 rounded-xl text-xs font-bold text-slate-500 hover:bg-slate-200 transition-all';
+        document.getElementById('tabBtnLabFpb').className = t==='fpb' ? 'px-4 py-2 rounded-xl text-xs font-bold bg-emerald-500 text-white shadow transition-all' : 'px-4 py-2 rounded-xl text-xs font-bold text-slate-500 hover:bg-slate-200 transition-all';
+      },
+      initKpkGame() {
+        this.kTarget = parseInt(document.getElementById('kpkTargetSelect').value);
+        this.kCols = []; document.getElementById('kpkCollectedItems').innerHTML = '';
+        document.getElementById('kpkScoreIndicator').innerText = `0/6`;
+        document.getElementById('kpkMultiplicationToast').innerHTML = 'Klik kartu angka untuk menguji perkalian';
+        document.getElementById('kpkMultiplicationToast').className = 'mb-4 p-3 rounded-xl bg-slate-50 border border-slate-200 text-sm font-mono font-bold text-slate-500 text-center transition-all h-12 flex items-center justify-center';
+        const vals = [1,2,3,4,5,6].map(i=>this.kTarget*i).concat([7,11,13,17,19,23].map(i=>this.kTarget*2+i)).slice(0,12).sort(()=>Math.random()-0.5);
+        document.getElementById('kpkCardsPool').innerHTML = vals.map(v => `<button onclick="labApp.clickKpk(${v}, this)" class="p-3 bg-white hover:bg-sky-50 border-2 border-slate-200 hover:border-sky-300 rounded-xl font-bold text-2xl shadow-sm transition-all transform active:scale-95">${v}</button>`).join('');
+      },
+      clickKpk(v, btn) {
+        const toast = document.getElementById('kpkMultiplicationToast');
+        if(v % this.kTarget === 0 && !this.kCols.includes(v)) {
+          sound.playCorrect(); this.kCols.push(v);
+          const i = v/this.kTarget;
+          toast.innerHTML = `<span class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> ${this.kTarget} × ${i} = ${v} (Kelipatan)</span>`;
+          toast.className = 'mb-4 p-3 rounded-xl bg-emerald-50 border border-emerald-300 text-sm font-mono font-black text-emerald-800 text-center transition-all shadow-inner h-12 flex items-center justify-center transform scale-105';
+          document.getElementById('kpkCollectedItems').innerHTML += `<span class="bg-sky-500 text-white font-mono px-3 py-1.5 rounded-lg shadow-md text-sm font-bold border-b-2 border-sky-700 animate-pop">${this.kTarget}×${i}=${v}</span>`;
+          btn.classList.add('opacity-0','scale-50','pointer-events-none');
+          document.getElementById('kpkScoreIndicator').innerText = `${this.kCols.length}/6`;
+          setTimeout(() => toast.classList.remove('scale-105'), 300);
+          if(this.kCols.length===6) setTimeout(()=>sound.playVictory(), 500);
+        } else if (!this.kCols.includes(v)) {
+          sound.playWrong(); btn.classList.add('animate-shake','bg-rose-100','border-rose-300','text-rose-700');
+          setTimeout(()=>btn.classList.remove('animate-shake','bg-rose-100','border-rose-300','text-rose-700'), 500);
+          toast.innerHTML = `<span class="flex items-center gap-2"><i class="fa-solid fa-xmark text-rose-500"></i> ${v} tidak habis dibagi ${this.kTarget} (Bukan Kelipatan)</span>`;
+          toast.className = 'mb-4 p-3 rounded-xl bg-rose-50 border border-rose-300 text-sm font-mono font-bold text-rose-800 text-center transition-all h-12 flex items-center justify-center';
+        }
+      },
+      initFpbGame() {
+        this.fTarget = parseInt(document.getElementById('fpbTargetSelect').value);
+        this.fCols = []; document.getElementById('fpbCollectedApples').innerHTML = ''; document.getElementById('fpbPairMultiplication').innerHTML = '';
+        this.fTrue = []; for(let i=1; i<=this.fTarget; i++) if(this.fTarget%i===0) this.fTrue.push(i);
+        document.getElementById('fpbScoreIndicator').innerText = `0/${this.fTrue.length}`;
+        document.getElementById('fpbDivisionToast').innerHTML = 'Klik apel untuk menguji pembagian';
+        document.getElementById('fpbDivisionToast').className = 'mb-4 p-3 rounded-xl bg-slate-50 border border-slate-200 text-sm font-mono font-bold text-slate-500 text-center transition-all h-12 flex items-center justify-center';
+        let vals = [...this.fTrue]; while(vals.length<12) vals.push(Math.floor(Math.random()*20)+this.fTarget+1);
+        vals = [...new Set(vals)].slice(0,12).sort(()=>Math.random()-0.5);
+        document.getElementById('fpbApplePool').innerHTML = vals.map(v => `<button onclick="labApp.clickFpb(${v}, this)" class="py-3 px-2 bg-white hover:bg-emerald-50 border-2 border-slate-200 hover:border-emerald-300 rounded-xl font-bold text-xl flex flex-col items-center justify-center shadow-sm transition-all transform active:scale-95"><span class="text-3xl mb-1 drop-shadow-sm">🍎</span>${v}</button>`).join('');
+      },
+      clickFpb(v, btn) {
+        const toast = document.getElementById('fpbDivisionToast');
+        if(this.fTarget % v === 0 && !this.fCols.includes(v)) {
+          sound.playCorrect(); this.fCols.push(v);
+          const r = this.fTarget/v;
+          toast.innerHTML = `<span class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> ${this.fTarget} ÷ ${v} = ${r} (Habis)</span>`;
+          toast.className = 'mb-4 p-3 rounded-xl bg-emerald-50 border border-emerald-300 text-sm font-mono font-black text-emerald-800 text-center transition-all shadow-inner h-12 flex items-center justify-center transform scale-105';
+          document.getElementById('fpbCollectedApples').innerHTML += `<span class="bg-emerald-500 text-white font-mono px-3 py-1.5 rounded-lg shadow-md text-sm font-bold border-b-2 border-emerald-700 animate-pop flex items-center gap-1">🍎 ${v}</span>`;
+          document.getElementById('fpbPairMultiplication').innerHTML += `<div class="bg-white/60 px-2 py-0.5 rounded border border-emerald-100">✨ ${v} × ${r} = ${this.fTarget}</div>`;
+          btn.classList.add('opacity-0','scale-50','pointer-events-none');
+          document.getElementById('fpbScoreIndicator').innerText = `${this.fCols.length}/${this.fTrue.length}`;
+          setTimeout(() => toast.classList.remove('scale-105'), 300);
+          if(this.fCols.length===this.fTrue.length) setTimeout(()=>sound.playVictory(), 500);
+        } else if (!this.fCols.includes(v)) {
+          sound.playWrong(); btn.classList.add('animate-shake','bg-rose-100','border-rose-300','text-rose-700');
+          setTimeout(()=>btn.classList.remove('animate-shake','bg-rose-100','border-rose-300','text-rose-700'), 500);
+          toast.innerHTML = `<span class="flex items-center gap-2"><i class="fa-solid fa-xmark text-rose-500"></i> ${this.fTarget} ÷ ${v} = ${Math.floor(this.fTarget/v)} sisa ${this.fTarget%v} (Bukan)</span>`;
+          toast.className = 'mb-4 p-3 rounded-xl bg-rose-50 border border-rose-300 text-sm font-mono font-bold text-rose-800 text-center transition-all h-12 flex items-center justify-center';
+        }
+      }
+    };
+  </script>
+
+  <script>
+    /* ========================================================
+       KUIS BALAP KATAK 4 PEMAIN (SIMULTAN 4 KOLOM & LIVE LEADERBOARD)
+    ======================================================== */
+    const raceApp = {
+      players: [ {n:'',s:0,q:0,opts:[]}, {n:'',s:0,q:0,opts:[]}, {n:'',s:0,q:0,opts:[]}, {n:'',s:0,q:0,opts:[]} ],
+      questions: [
+        {q:"KPK dari 3 dan 4", a:"12", o:["12","7","24","14"]}, {q:"KPK 4 dan 6", a:"12", o:["12","24","10","18"]},
+        {q:"FPB dari 12 & 18", a:"6", o:["6","3","4","9"]}, {q:"FPB 20 & 30", a:"10", o:["10","5","2","20"]},
+        {q:"Kelipatan ke-3 dari 5", a:"15", o:["15","10","20","8"]}, {q:"Faktor dari 8", a:"1,2,4,8", o:["1,2,4,8","1,2,8","2,4,8","8,16"]},
+        {q:"KPK 2 dan 5", a:"10", o:["10","7","20","15"]}, {q:"FPB 16 & 24", a:"8", o:["8","4","6","12"]},
+        {q:"Lari 2 hr, Renang 3 hr. Bareng?", a:"6 hari", o:["6 hari","5 hari","12 hari","8 hari"]}, {q:"24 kelereng biru, 36 merah. Kantong terbanyak?", a:"12", o:["12","6","18","24"]}
+      ],
+      startRace() {
+        sound.playPop();
+        for(let i=0; i<4; i++) {
+          this.players[i].n = document.getElementById('pName'+(i+1)).value || `Pemain ${i+1}`;
+          this.players[i].s = 0; this.players[i].q = 0;
+          this.players[i].opts = [...this.questions].sort(()=>Math.random()-0.5);
+        }
+        document.getElementById('raceSetupPanel').classList.add('hidden');
+        document.getElementById('raceTrackArena').classList.remove('hidden');
+        this.renderLanes(); this.renderColumns();
+      },
+      renderLanes() {
+        const c = document.getElementById('liveRaceLanesContainer');
+        c.innerHTML = this.players.map((p, i) => {
+          const pct = Math.min((p.s/10)*100, 100);
+          const colors = ['bg-emerald-400','bg-sky-400','bg-rose-400','bg-amber-400'];
+          return `
+            <div class="flex items-center gap-3 w-full">
+              <span class="w-16 sm:w-20 font-bold text-xs sm:text-sm truncate text-slate-700">${p.n}</span>
+              <div class="flex-grow h-6 sm:h-8 bg-slate-100 rounded-full relative border border-slate-200 shadow-inner overflow-hidden flex items-center">
+                <div class="absolute right-0 top-0 bottom-0 w-6 sm:w-8 bg-black/10 flex items-center justify-center border-l-2 border-white/50 z-0">🏁</div>
+                <div class="h-full ${colors[i]} rounded-full transition-all duration-700 ease-in-out relative z-10 border-r-2 border-white/50" style="width:${pct}%"></div>
+                <div class="absolute text-xl sm:text-2xl top-[-2px] sm:top-0 transition-all duration-700 ease-in-out drop-shadow-md z-20" style="left:calc(${pct}% - 14px)">🐸</div>
+              </div>
+              <span class="font-mono font-black text-xs sm:text-sm w-12 text-right text-slate-500">${p.s}/10</span>
+            </div>`;
+        }).join('');
+      },
+      renderColumns() {
+        const c = document.getElementById('simultaneousRaceColumns');
+        const colors = ['bg-emerald-50 border-emerald-200','bg-sky-50 border-sky-200','bg-rose-50 border-rose-200','bg-amber-50 border-amber-200'];
+        const textColors = ['text-emerald-800','text-sky-800','text-rose-800','text-amber-800'];
+        c.innerHTML = this.players.map((p, i) => {
+          const q = p.opts[p.q];
+          if(!q) return `<div class="p-4 ${colors[i]} rounded-2xl border-2 text-center font-bold text-slate-700 flex flex-col justify-center min-h-[220px] shadow-sm"><span class="text-4xl mb-2">🏁</span>Selesai!<br>Skor: ${p.s}/10</div>`;
+          const optsHtml = q.o.map(opt => `<button onclick="raceApp.ans(${i}, '${opt}')" class="p-2 sm:p-3 bg-white border-2 border-slate-200 rounded-xl text-xs sm:text-sm font-bold hover:bg-slate-50 hover:border-slate-300 shadow-sm active:scale-95 transition-all w-full h-full flex items-center justify-center break-words leading-tight">${opt}</button>`).join('');
+          return `
+            <div class="p-3 sm:p-4 ${colors[i]} rounded-2xl border-2 shadow-sm flex flex-col justify-between min-h-[240px]">
+              <div class="flex justify-between items-center border-b border-slate-200/50 pb-2 mb-2">
+                <span class="font-black text-xs sm:text-sm truncate ${textColors[i]}">${p.n}</span>
+                <span class="text-[10px] sm:text-xs bg-white px-2 py-0.5 rounded-full font-mono font-bold shadow-sm">${p.q+1}/10</span>
+              </div>
+              <p class="font-bold text-xs sm:text-sm text-slate-800 leading-snug flex-grow flex items-center text-center justify-center px-1">${q.q}</p>
+              <div class="grid grid-cols-2 gap-2 mt-3 flex-shrink-0" style="grid-auto-rows: 1fr;">${optsHtml}</div>
+            </div>`;
+        }).join('');
+      },
+      ans(pIdx, sel) {
+        const p = this.players[pIdx];
+        if(p.q >= 10) return;
+        if(sel === p.opts[p.q].a) { sound.playHop(); p.s++; } else { sound.playWrong(); }
+        p.q++; this.renderLanes(); this.renderColumns();
+        if(this.players.every(pl => pl.q >= 10)) { setTimeout(() => this.finish(), 800); }
+      },
+      finish() {
+        sound.playVictory(); app.completeStep('kuis');
+        document.getElementById('raceTrackArena').classList.add('hidden');
+        document.getElementById('racePodiumBanner').classList.remove('hidden');
+        const sorted = [...this.players].sort((a,b)=>b.s-a.s);
+        document.getElementById('racePodiumCardsList').innerHTML = sorted.map((p,i) => `
+          <div class="bg-white border-2 rounded-2xl p-4 text-center shadow-md relative overflow-hidden ${i===0?'border-amber-400 scale-105 z-10':'border-slate-200'}">
+            ${i===0?'<div class="absolute top-0 left-0 right-0 bg-amber-400 text-white text-[10px] font-black uppercase py-0.5">Juara 1</div>':''}
+            <div class="mt-4"><span class="text-4xl font-black ${i===0?'text-amber-500':i===1?'text-slate-400':i===2?'text-orange-400':'text-slate-300'}">#${i+1}</span></div>
+            <h4 class="font-black text-slate-800 mt-2 text-lg truncate">${p.n}</h4>
+            <div class="bg-emerald-50 text-emerald-700 text-xs font-bold px-3 py-1 rounded-full inline-block mt-2 border border-emerald-200">${p.s} Benar (${(p.s/10)*100}%)</div>
+          </div>`).join('');
+      },
+      resetToSetup() {
+        sound.playPop();
+        document.getElementById('racePodiumBanner').classList.add('hidden');
+        document.getElementById('raceTrackArena').classList.add('hidden');
+        document.getElementById('raceSetupPanel').classList.remove('hidden');
+      }
+    };
+  </script>
+
+  <script>
+    /* ========================================================
+       GIM DETEKTIF GERAK (ZOOM OUT + PEMBAHASAN IMERSIF)
+    ======================================================== */
+    const detectiveApp = {
+      stream: null, video: null, canvas: null, ctx: null,
+      loopId: null, timerId: null,
+      qIndex: 0, score: 0, timeLeft: 10,
+      currentZone: null, state: 'intro',
+      prevData: null,
+      
+      // Bank Soal lengkap dengan Pembahasan Terstruktur (\n untuk baris baru)
+      bank: [
+        { q: "Raka lari tiap 4 hari. Sinta badminton tiap 6 hari. Hari ini bersama. Berapa hari lagi mereka latihan bersama?", correct: "12 hari", wrong: "10 hari", exp: "Kelipatan 4: 4, 8, 12, 16...\nKelipatan 6: 6, 12, 18...\n\n⭐ Pertemuan pertama (KPK) = 12\nJadi, mereka berlatih bersama 12 hari lagi." },
+        { q: "FPB dari bilangan 12 dan 18 adalah ...", correct: "6", wrong: "3", exp: "Faktor 12: 1, 2, 3, 4, 6, 12\nFaktor 18: 1, 2, 3, 6, 9, 18\n\n⭐ Faktor persekutuan terbesar (FPB) adalah 6." },
+        { q: "KPK dari bilangan 3 dan 5 adalah ...", correct: "15", wrong: "8", exp: "Kelipatan 3: 3, 6, 9, 12, 15...\nKelipatan 5: 5, 10, 15...\n\n⭐ Kelipatan persekutuan terkecilnya adalah 15." },
+        { q: "Budi punya 20 permen dan 30 cokelat untuk dibagi rata. Berapa jumlah teman terbanyak yang bisa diberi?", correct: "10 anak", wrong: "5 anak", exp: "Faktor 20: ..., 5, 10, 20\nFaktor 30: ..., 5, 10, 15, 30\n\n⭐ FPB dari 20 dan 30 adalah 10.\nMaka dapat dibagikan kepada 10 anak secara adil." },
+        { q: "KPK dari bilangan 8 dan 12 adalah ...", correct: "24", wrong: "48", exp: "Kelipatan 8: 8, 16, 24, 32...\nKelipatan 12: 12, 24, 36...\n\n⭐ KPK = 24." },
+        { q: "FPB dari bilangan 15 dan 25 adalah ...", correct: "5", wrong: "15", exp: "Faktor 15: 1, 3, 5, 15\nFaktor 25: 1, 5, 25\n\n⭐ Faktor persekutuan terbesar adalah 5." },
+        { q: "KPK dari bilangan 4 dan 10 adalah ...", correct: "20", wrong: "40", exp: "Kelipatan 4: ..., 12, 16, 20...\nKelipatan 10: 10, 20, 30...\n\n⭐ Kelipatan terkecil bersama adalah 20." },
+        { q: "FPB dari bilangan 16 dan 24 adalah ...", correct: "8", wrong: "4", exp: "Faktor 16: ..., 4, 8, 16\nFaktor 24: ..., 4, 6, 8, 12...\n\n⭐ Faktor bersama terbesar adalah 8." },
+        { q: "KPK dari bilangan 5 dan 10 adalah ...", correct: "10", wrong: "50", exp: "Kelipatan 5: 5, 10, 15...\nKelipatan 10: 10, 20...\n\n⭐ Karena 10 habis dibagi 5, KPK-nya adalah bilangan itu sendiri yaitu 10." },
+        { q: "FPB dari bilangan 14 dan 21 adalah ...", correct: "7", wrong: "3", exp: "Faktor 14: 1, 2, 7, 14\nFaktor 21: 1, 3, 7, 21\n\n⭐ FPB-nya adalah 7." },
+        { q: "KPK dari bilangan 2 dan 7 adalah ...", correct: "14", wrong: "9", exp: "2 dan 7 adalah bilangan saling lepas.\n\n⭐ KPK = 2 × 7 = 14." },
+        { q: "FPB dari bilangan 24 dan 36 adalah ...", correct: "12", wrong: "6", exp: "Mencari faktor persekutuan terbesar...\n12 × 2 = 24\n12 × 3 = 36\n\n⭐ FPB terbesar adalah 12." },
+        { q: "KPK dari bilangan 6 dan 9 adalah ...", correct: "18", wrong: "36", exp: "Kelipatan 6: 6, 12, 18, 24...\nKelipatan 9: 9, 18, 27...\n\n⭐ KPK = 18." },
+        { q: "FPB dari bilangan 18 dan 27 adalah ...", correct: "9", wrong: "3", exp: "Faktor 18: ..., 3, 6, 9, 18\nFaktor 27: ..., 3, 9, 27\n\n⭐ FPB = 9." },
+        { q: "Bus A berangkat tiap 3 jam, Bus B tiap 4 jam. Jika berangkat bersama sekarang, berapa jam lagi berangkat bersama lagi?", correct: "12 jam", wrong: "7 jam", exp: "Kelipatan 3: 3, 6, 9, 12...\nKelipatan 4: 4, 8, 12...\n\n⭐ Mereka akan berangkat bersama 12 jam lagi." },
+        { q: "30 permen dan 40 cokelat dibagi rata ke kantong terbanyak. Berapa kantong yang dibutuhkan?", correct: "10 kantong", wrong: "5 kantong", exp: "Faktor 30: ..., 10, 15, 30\nFaktor 40: ..., 10, 20, 40\n\n⭐ FPB dari 30 dan 40 adalah 10." },
+        { q: "KPK dari bilangan 10 dan 15 adalah ...", correct: "30", wrong: "60", exp: "Kelipatan 10: 10, 20, 30, 40...\nKelipatan 15: 15, 30, 45...\n\n⭐ KPK = 30." },
+        { q: "FPB dari bilangan 28 dan 42 adalah ...", correct: "14", wrong: "7", exp: "Faktor 28: ..., 7, 14, 28\nFaktor 42: ..., 7, 14, 21, 42\n\n⭐ FPB = 14." },
+        { q: "Bel A berbunyi tiap 5 menit, Bel B tiap 8 menit. Kapan mereka berbunyi bersama lagi?", correct: "40 menit", wrong: "13 menit", exp: "KPK dari 5 dan 8.\n\n⭐ Karena tidak ada faktor persekutuan, kalikan saja: 5 × 8 = 40 menit." },
+        { q: "Ada 45 buku dan 60 pensil. Dibagi rata ke anak terbanyak. Berapa anak yang dapat?", correct: "15 anak", wrong: "5 anak", exp: "Faktor 45: ..., 5, 9, 15, 45\nFaktor 60: ..., 5, 10, 12, 15, 20, 30, 60\n\n⭐ FPB = 15 anak." }
+      ],
+      sessionQuestions: [],
+
+      prepareSession() {
+        const shuffledBank = [...this.bank].sort(() => Math.random() - 0.5);
+        const picked = shuffledBank.slice(0, 10);
+        this.sessionQuestions = picked.map(item => {
+           const isLeftCorrect = Math.random() < 0.5;
+           return {
+              q: item.q,
+              l: isLeftCorrect ? item.correct : item.wrong,
+              r: isLeftCorrect ? item.wrong : item.correct,
+              a: isLeftCorrect ? 'KIRI' : 'KANAN',
+              exp: item.exp
+           };
+        });
+      },
+
+      async startCameraAndGame() {
+        sound.playPop();
+        document.getElementById('detektifSetupPanel').classList.add('hidden');
+        document.getElementById('detektifGameArea').classList.remove('hidden');
+        this.video = document.getElementById('detektifVideo');
+        this.canvas = document.getElementById('detektifCanvas');
+        this.ctx = this.canvas.getContext('2d', { willReadFrequently: true });
+        
+        try {
+          this.stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false });
+          this.video.srcObject = this.stream;
+          this.video.onloadedmetadata = () => {
+            this.canvas.width = 160; 
+            this.canvas.height = 120;
+            this.startLoop();
+          };
+        } catch(e) {
+          console.warn("Kamera tidak tersedia. Menggunakan mode manual.");
+        }
+        
+        this.qIndex = 0; this.score = 0;
+        this.prepareSession();
+        this.loadQuestion();
+      },
+
+      loadQuestion() {
+        this.state = 'playing';
+        const q = this.sessionQuestions[this.qIndex];
+        
+        document.getElementById('detektifQNum').innerText = `SOAL ${this.qIndex+1}/10`;
+        document.getElementById('detektifScore').innerText = this.score;
+        document.getElementById('detektifQuestionText').innerText = q.q;
+        
+        // Reset Zoom Out Classes
+        const qBar = document.getElementById('detektifQuestionBar');
+        qBar.classList.remove('scale-[0.85]', '-translate-y-4', 'opacity-90');
+        
+        const ansL = document.getElementById('detektifAnsLeft');
+        const ansR = document.getElementById('detektifAnsRight');
+        ansL.classList.remove('scale-75'); ansL.classList.remove('hidden'); ansL.innerHTML = q.l;
+        ansR.classList.remove('scale-75'); ansR.classList.remove('hidden'); ansR.innerHTML = q.r;
+
+        this.resetZones();
+        
+        this.timeLeft = 10;
+        const tContainer = document.getElementById('detektifTimerContainer');
+        tContainer.classList.remove('scale-0', 'opacity-0');
+        document.getElementById('detektifTimer').innerText = this.timeLeft;
+        document.getElementById('detektifTracker').classList.remove('hidden');
+        document.getElementById('detektifNarrator').innerText = "🔍 Detektif, temukan zona jawabanmu!";
+        
+        clearInterval(this.timerId);
+        this.timerId = setInterval(() => {
+          if (this.state !== 'playing') return;
+          this.timeLeft--;
+          document.getElementById('detektifTimer').innerText = this.timeLeft;
+          if(this.timeLeft <= 3 && this.timeLeft > 0) sound.playPop(); 
+          if(this.timeLeft <= 0) {
+            this.lockPosition();
+          }
+        }, 1000);
+      },
+
+      startLoop() {
+        const process = () => {
+          if(this.video.readyState === this.video.HAVE_ENOUGH_DATA && this.state === 'playing') {
+            this.ctx.drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height);
+            const currData = this.ctx.getImageData(0,0,this.canvas.width,this.canvas.height);
+            
+            if(this.prevData) {
+              let diffL = 0, diffR = 0;
+              for(let i=0; i<currData.data.length; i+=4) {
+                const diff = Math.abs(currData.data[i] - this.prevData.data[i]) + Math.abs(currData.data[i+1] - this.prevData.data[i+1]) + Math.abs(currData.data[i+2] - this.prevData.data[i+2]);
+                if(diff > 40) { 
+                  const x = (i/4) % this.canvas.width;
+                  if(x > this.canvas.width/2) diffL++; else diffR++; 
+                }
+              }
+              if(diffL > 50 || diffR > 50) {
+                this.setDetectedZone(diffL > diffR ? 'KIRI' : 'KANAN');
+              }
+            }
+            this.prevData = currData;
+          }
+          this.loopId = requestAnimationFrame(process);
+        };
+        process();
+      },
+
+      setDetectedZone(zone) {
+        if(this.state !== 'playing') return;
+        this.currentZone = zone;
+        document.getElementById('detektifTracker').style.left = zone === 'KIRI' ? '25%' : '75%';
+        document.getElementById('detektifZoneLeft').classList.toggle('bg-blue-500/40', zone==='KIRI');
+        document.getElementById('detektifZoneRight').classList.toggle('bg-orange-500/40', zone==='KANAN');
+      },
+
+      forceZone(zone) {
+        if(this.state === 'playing') {
+          sound.playPop();
+          this.setDetectedZone(zone);
+          this.timeLeft = 0;
+          this.lockPosition();
+        }
+      },
+
+      resetZones() {
+        this.currentZone = null;
+        document.getElementById('detektifStopOverlay').classList.add('hidden');
+        document.getElementById('detektifNextOverlay').classList.add('hidden');
+        document.getElementById('detektifNextOverlay').classList.remove('translate-y-0', 'opacity-100');
+        document.getElementById('detektifNextOverlay').classList.add('translate-y-10', 'opacity-0');
+        
+        const zl = document.getElementById('detektifZoneLeft');
+        zl.className = 'absolute inset-y-0 left-0 w-1/2 flex flex-col justify-center items-center z-20 transition-all duration-700 bg-blue-500/20 hover:bg-blue-500/30 cursor-pointer p-2 sm:p-4';
+        
+        const rl = document.getElementById('detektifResultLeft');
+        rl.classList.add('hidden', 'translate-y-10', 'opacity-0');
+        rl.classList.remove('opacity-100', 'translate-y-0');
+        
+        const zr = document.getElementById('detektifZoneRight');
+        zr.className = 'absolute inset-y-0 right-0 w-1/2 flex flex-col justify-center items-center z-20 transition-all duration-700 bg-orange-500/20 hover:bg-orange-500/30 cursor-pointer p-2 sm:p-4';
+        
+        const rr = document.getElementById('detektifResultRight');
+        rr.classList.add('hidden', 'translate-y-10', 'opacity-0');
+        rr.classList.remove('opacity-100', 'translate-y-0');
+        
+        document.getElementById('detektifTracker').style.left = '50%';
+      },
+
+      lockPosition() {
+        this.state = 'locked';
+        clearInterval(this.timerId);
+        document.getElementById('detektifTimer').innerText = "0";
+        document.getElementById('detektifStopOverlay').classList.remove('hidden');
+        sound.playWrong(); 
+        
+        setTimeout(() => {
+          document.getElementById('detektifStopOverlay').classList.add('hidden');
+          this.evaluateAnswer();
+        }, 1000);
+      },
+
+      evaluateAnswer() {
+        this.state = 'result';
+        const q = this.sessionQuestions[this.qIndex];
+        const isCorrect = this.currentZone === q.a;
+        
+        const zl = document.getElementById('detektifZoneLeft');
+        const zr = document.getElementById('detektifZoneRight');
+        const ansL = document.getElementById('detektifAnsLeft');
+        const ansR = document.getElementById('detektifAnsRight');
+        const rl = document.getElementById('detektifResultLeft');
+        const rr = document.getElementById('detektifResultRight');
+        
+        // Fase 1 & 2: Sembunyikan Timer dan Zoom Out
+        document.getElementById('detektifTimerContainer').classList.add('scale-0', 'opacity-0');
+        const qBar = document.getElementById('detektifQuestionBar');
+        qBar.classList.add('scale-[0.85]', '-translate-y-4', 'opacity-90');
+        ansL.classList.add('scale-75');
+        ansR.classList.add('scale-75');
+
+        // Fase 3 & 4: Ruang pembahasan & Kartu Masuk
+        if (q.a === 'KIRI') {
+           zr.className = 'absolute inset-y-0 right-0 w-1/2 flex flex-col justify-center items-center z-10 transition-all duration-700 bg-black/70 p-2 sm:p-4';
+           zl.className = 'absolute inset-y-0 left-0 w-1/2 flex flex-col justify-center items-center z-30 transition-all duration-700 bg-emerald-500/40 p-2 sm:p-4';
+           
+           ansR.innerHTML = `<span class="text-rose-500 line-through">${q.r}</span><div class="text-sm text-slate-300 mt-2 font-bold uppercase">Bukan Jawaban</div>`;
+           
+           rl.classList.remove('hidden'); rl.classList.add('flex');
+           document.getElementById('detektifExpLeft').innerText = q.exp;
+           
+           setTimeout(() => { rl.classList.remove('opacity-0', 'translate-y-10'); rl.classList.add('opacity-100', 'translate-y-0'); }, 150);
+        } else {
+           zl.className = 'absolute inset-y-0 left-0 w-1/2 flex flex-col justify-center items-center z-10 transition-all duration-700 bg-black/70 p-2 sm:p-4';
+           zr.className = 'absolute inset-y-0 right-0 w-1/2 flex flex-col justify-center items-center z-30 transition-all duration-700 bg-emerald-500/40 p-2 sm:p-4';
+           
+           ansL.innerHTML = `<span class="text-rose-500 line-through">${q.l}</span><div class="text-sm text-slate-300 mt-2 font-bold uppercase">Bukan Jawaban</div>`;
+           
+           rr.classList.remove('hidden'); rr.classList.add('flex');
+           document.getElementById('detektifExpRight').innerText = q.exp;
+           
+           setTimeout(() => { rr.classList.remove('opacity-0', 'translate-y-10'); rr.classList.add('opacity-100', 'translate-y-0'); }, 150);
+        }
+
+        if (isCorrect) {
+          sound.playApplause(); 
+          this.score += 100;
+          document.getElementById('detektifNarrator').innerHTML = "<span class='text-emerald-600'><i class='fa-solid fa-circle-check'></i> Kasus Terpecahkan! Tepat sekali!</span>";
+        } else {
+          sound.playWrong();
+          document.getElementById('detektifNarrator').innerHTML = "<span class='text-rose-600'><i class='fa-solid fa-magnifying-glass'></i> Petunjuk belum lengkap. Coba pahami pembahasannya!</span>";
+        }
+        
+        document.getElementById('detektifScore').innerText = this.score;
+
+        // Fase 5: Munculkan Tombol Lanjut di Footer
+        setTimeout(() => {
+          const btn = document.getElementById('detektifNextOverlay');
+          btn.classList.remove('hidden');
+          setTimeout(() => {
+             btn.classList.remove('translate-y-10', 'opacity-0');
+             btn.classList.add('translate-y-0', 'opacity-100');
+          }, 50);
+        }, 1500);
+      },
+
+      nextQuestion() {
+        sound.playPop();
+        this.qIndex++;
+        if(this.qIndex < this.sessionQuestions.length) {
+          this.loadQuestion();
+        } else {
+          this.endGame();
+        }
+      },
+
+      endGame() {
+        sound.playVictory();
+        if(this.stream) this.stream.getTracks().forEach(track => track.stop());
+        cancelAnimationFrame(this.loopId);
+        
+        document.getElementById('detektifGameArea').classList.add('hidden');
+        document.getElementById('detektifEndScreen').classList.remove('hidden');
+        document.getElementById('detektifFinalScore').innerText = this.score;
+        app.completeStep('detektif');
+      },
+
+      resetToSetup() {
+        if(this.stream) this.stream.getTracks().forEach(track => track.stop());
+        cancelAnimationFrame(this.loopId);
+        clearInterval(this.timerId);
+        document.getElementById('detektifGameArea').classList.add('hidden');
+        document.getElementById('detektifEndScreen').classList.add('hidden');
+        document.getElementById('detektifSetupPanel').classList.remove('hidden');
+      }
+    };
+  </script>
+
+  <script>
+    /* ========================================================
+       EVALUASI (20 SOAL)
+    ======================================================== */
+    const evalApp = {
+      idx: 0, userAns: {},
+      q: [
+        { id:1, q:"Kelipatan dari 6 adalah...", o:["6, 12, 18, 24...","1, 2, 3, 6","6, 10, 16...","12, 20..."], a:"6, 12, 18, 24..." },
+        { id:2, q:"Semua faktor dari 18 adalah...", o:["1, 2, 3, 6, 9, 18","1, 2, 3, 4, 6","2, 3, 6, 9","1, 3, 6, 9, 18"], a:"1, 2, 3, 6, 9, 18" },
+        { id:3, q:"KPK dari 4 dan 6 adalah...", o:["12","24","8","18"], a:"12" },
+        { id:4, q:"FPB dari 16 dan 24 adalah...", o:["8","4","6","12"], a:"8" },
+        { id:5, q:"Bus A tiap 15 mnt, Bus B 20 mnt. Bersama tiap...", o:["60 mnt","30 mnt","45 mnt","75 mnt"], a:"60 mnt" },
+        { id:6, q:"28 kelereng dan 42 apel dibagi rata. Maksimal kelompok?", o:["14","7","21","28"], a:"14" },
+        { id:7, q:"Kelipatan persekutuan 3 dan 5 kurang dari 40...", o:["15, 30","10, 20","15, 30, 45","15 saja"], a:"15, 30" },
+        { id:8, q:"Bilangan 5 adalah faktor 24. Benar/Salah?", o:["Salah","Benar"], a:"Salah" },
+        { id:9, q:"KPK dari bilangan prima 7 dan 11...", o:["77","18","1","70"], a:"77" },
+        { id:10, q:"FPB 30 dan 45 adalah...", o:["15","5","10","30"], a:"15" },
+        { id:11, q:"KPK dari 2, 3, dan 4...", o:["12","24","6","8"], a:"12" },
+        { id:12, q:"FPB dari 12, 18, 24...", o:["6","2","3","12"], a:"6" },
+        { id:13, q:"Kelipatan ke-5 dari 8...", o:["40","32","48","24"], a:"40" },
+        { id:14, q:"Faktor semua bilangan asli adalah...", o:["1","0","2","10"], a:"1" },
+        { id:15, q:"Lampu merah 8 dtk, kuning 12 dtk. Bersama di dtk ke...", o:["24","16","20","32"], a:"24" },
+        { id:16, q:"Konsep 'kapan bersama lagi berkala' memakai...", o:["KPK","FPB","Pengurangan","Pembagian"], a:"KPK" },
+        { id:17, q:"36 buku & 48 pensil dibagikan rata. Brp anak terbanyak?", o:["12","6","8","16"], a:"12" },
+        { id:18, q:"KPK 10 & 15 adalah...", o:["30","20","45","15"], a:"30" },
+        { id:19, q:"Faktor dari 9 dan 12 yang sama adalah...", o:["1 dan 3","1, 2, 3","3 dan 4","1 dan 9"], a:"1 dan 3" },
+        { id:20, q:"FPB selalu bernilai lebih besar dari bilangannya. Benar/Salah?", o:["Salah","Benar"], a:"Salah" }
+      ],
+      init() { this.renderQ(); },
+      renderQ() {
+        const q = this.q[this.idx];
+        document.getElementById('evalCounter').innerText = `${this.idx + 1} / 20`;
+        document.getElementById('evalQuestionText').innerText = q.q;
+        document.getElementById('evalProgressBar').style.width = ((this.idx+1)/20)*100 + '%';
+        const s = this.userAns[q.id];
+        document.getElementById('evalOptionsList').innerHTML = q.o.map(opt => `
+          <button onclick="evalApp.sel('${opt}')" class="w-full text-left p-4 rounded-2xl border-2 font-bold transition-all duration-200 ${s===opt?'bg-purple-100 border-purple-500 text-purple-900 shadow-md transform scale-[1.01]':'bg-white border-slate-200 text-slate-700 hover:bg-purple-50 hover:border-purple-300'}">
+            ${opt}
+          </button>`).join('');
+        document.getElementById('btnPrevEval').disabled = this.idx===0;
+        document.getElementById('btnPrevEval').className = this.idx===0 ? 'px-5 py-2.5 bg-slate-100 rounded-xl font-bold text-slate-400 cursor-not-allowed' : 'px-5 py-2.5 bg-slate-100 hover:bg-slate-200 rounded-xl font-bold text-slate-600 transition-colors cursor-pointer';
+        document.getElementById('btnNextEval').innerHTML = this.idx===19 ? 'Kirim ➔' : 'Selanjutnya ➔';
+      },
+      sel(opt) { sound.playPop(); this.userAns[this.q[this.idx].id] = opt; this.renderQ(); },
+      nextQuestion() { 
+        sound.playPop(); 
+        if(this.idx<19) { this.idx++; this.renderQ(); } else { 
+          if(Object.keys(this.userAns).length < 20) {
+            alert("Harap jawab semua soal terlebih dahulu!"); return;
+          }
+          this.finish(); 
+        } 
+      },
+      prevQuestion() { sound.playPop(); if(this.idx>0) { this.idx--; this.renderQ(); } },
+      finish() {
+        sound.playVictory();
+        let c = 0; this.q.forEach(q => { if(this.userAns[q.id]===q.a) c++; });
+        const scr = Math.round((c/20)*100);
+        document.getElementById('evalScoreVal').innerText = scr+'/100';
+        document.getElementById('evalCorrectCount').innerText = c;
+        document.getElementById('evalWrongCount').innerText = 20-c;
+        document.getElementById('evalPercentageVal').innerText = scr+'%';
+        
+        const fb = document.getElementById('evalFeedbackText');
+        if(scr >= 80) fb.innerHTML = '🌟 "Hebat! Kamu sudah menguasai sebagian besar konsep FPB dan KPK."';
+        else if (scr >= 60) fb.innerHTML = '👍 "Bagus! Pemahamanmu sudah baik, yuk asah lagi agar lebih sempurna."';
+        else fb.innerHTML = '💪 "Terus berlatih! Beberapa konsep masih perlu kamu pelajari kembali."';
+
+        document.getElementById('evalActiveCard').classList.add('hidden');
+        document.getElementById('evalResultCard').classList.remove('hidden');
+      }
+    };
+
+    const reflectionApp = {
+      setMood(btn) {
+        sound.playPop();
+        document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('bg-teal-100','border-teal-400','scale-110','shadow-md'));
+        btn.classList.add('bg-teal-100','border-teal-400','scale-110','shadow-md');
+      },
+      submit() {
+        sound.playVictory(); document.getElementById('reflectionSuccessAlert').classList.remove('hidden');
+      }
+    };
+
+    /* Confetti */
+    function runConfetti() {
+      const c=document.getElementById('confettiCanvas'); if(!c)return;
+      const x=c.getContext('2d'); c.width=c.parentElement.offsetWidth; c.height=c.parentElement.offsetHeight;
+      let p=[]; const cls=['#38bdf8','#fbbf24','#f472b6','#34d399','#a78bfa'];
+      for(let i=0;i<100;i++) p.push({x:Math.random()*c.width, y:Math.random()*c.height-c.height, r:Math.random()*6+4, d:Math.random()*80, c:cls[Math.floor(Math.random()*cls.length)], t:Math.random()*10-10, ta:Math.random()*0.07+0.05, a:0});
+      function draw(){
+        x.clearRect(0,0,c.width,c.height);
+        p.forEach(b=>{ x.beginPath(); x.lineWidth=b.r/2; x.strokeStyle=b.c; x.moveTo(b.x+b.t+b.r,b.y); x.lineTo(b.x+b.t,b.y+b.t+b.r); x.stroke(); b.a+=b.ta; b.y+=(Math.cos(b.d)+3+b.r/2)/2; b.x+=Math.sin(b.d); b.t=Math.sin(b.a)*12; if(b.y>c.height){b.y=-10; b.x=Math.random()*c.width;} });
+        requestAnimationFrame(draw);
+      }
+      draw();
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      app.init(); kpkLesson.render(); fpbLesson.setGrouping(1); labApp.initKpkGame(); labApp.initFpbGame(); evalApp.init(); 
+    });
+  </script>
+</body>
+</html>
+```
