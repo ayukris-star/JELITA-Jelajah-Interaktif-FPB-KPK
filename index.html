@@ -307,17 +307,13 @@
         </div>
       </div>
 
-      <!-- Video Animasi KPK (YouTube) Link Eksternal -->
+      <!-- Video Animasi KPK -->
       <div class="bg-white border border-emerald-200 rounded-3xl p-6 space-y-4 shadow-sm relative z-20">
         <h2 class="text-xl font-bold font-fun text-slate-800 border-b border-emerald-100 pb-3 flex items-center gap-2">
           <i class="fa-brands fa-youtube text-red-500"></i> Video Animasi KPK
         </h2>
-        <div class="bg-sky-50 border border-sky-200 p-6 rounded-2xl flex flex-col items-center shadow-inner text-center">
-          <div class="text-5xl mb-4 animate-bounce">📺</div>
-          <p class="text-sky-900 font-bold mb-4 text-sm md:text-base max-w-lg">Mari tonton kisah Raka dan Sinta menentukan jadwal latihan bersama dengan KPK!</p>
-          <button onclick="window.open('https://youtu.be/Doqfe1a1b88?si=kFSErwHHQ975tOdV', '_blank')" class="inline-flex items-center gap-2 px-6 py-3 bg-red-600 hover:bg-red-500 text-white font-black text-lg rounded-2xl shadow-lg border-b-4 border-red-800 transform hover:-translate-y-1 active:translate-y-1 transition-all cursor-pointer">
-            <i class="fa-brands fa-youtube"></i> Tonton di YouTube
-          </button>
+        <div class="w-full aspect-video rounded-2xl overflow-hidden shadow-inner border-2 border-sky-100 bg-slate-100">
+          <iframe id="kpkVideoFrame" class="w-full h-full" src="https://www.youtube.com/embed/Doqfe1a1b88?enablejsapi=1" title="Video Animasi KPK" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
         </div>
       </div>
 
@@ -398,6 +394,16 @@
             <span class="text-xs font-black text-rose-700 bg-rose-100 px-3 py-1 rounded-full border border-rose-200">POS 3 • KEBUN APEL</span>
             <h1 class="text-2xl md:text-3xl font-extrabold font-fun text-slate-800 mt-1">MENGENAL FAKTOR & FPB</h1>
           </div>
+        </div>
+      </div>
+
+      <!-- Video Animasi FPB -->
+      <div class="bg-white border border-rose-200 rounded-3xl p-6 space-y-4 shadow-sm relative z-20">
+        <h2 class="text-xl font-bold font-fun text-slate-800 border-b border-rose-100 pb-3 flex items-center gap-2">
+          <i class="fa-brands fa-youtube text-red-500"></i> Video Animasi FPB
+        </h2>
+        <div class="w-full aspect-video rounded-2xl overflow-hidden shadow-inner border-2 border-rose-100 bg-slate-100">
+          <iframe id="fpbVideoFrame" class="w-full h-full" src="https://www.youtube.com/embed/hoQLRo4HIss?enablejsapi=1" title="Video Animasi FPB" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
         </div>
       </div>
 
@@ -966,6 +972,22 @@
         if(el) { el.classList.remove('hidden'); window.scrollTo(0,0); }
         if(id === 'detektif' && typeof detectiveApp.resetToSetup === 'function') detectiveApp.resetToSetup();
         if(id === 'selesai') this.renderFinishBadges();
+
+        // Autoplay & Auto-Pause Kontrol YouTube Video
+        const kpkF = document.getElementById('kpkVideoFrame');
+        const fpbF = document.getElementById('fpbVideoFrame');
+        
+        if (kpkF && kpkF.contentWindow) kpkF.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+        if (fpbF && fpbF.contentWindow) fpbF.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+
+        if (id === 'kpk' && kpkF) {
+            if(!kpkF.src.includes('autoplay=1')) kpkF.src = "https://www.youtube.com/embed/Doqfe1a1b88?enablejsapi=1&autoplay=1";
+            else setTimeout(() => kpkF.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*'), 300);
+        }
+        if (id === 'fpb' && fpbF) {
+            if(!fpbF.src.includes('autoplay=1')) fpbF.src = "https://www.youtube.com/embed/hoQLRo4HIss?enablejsapi=1&autoplay=1";
+            else setTimeout(() => fpbF.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*'), 300);
+        }
       },
       completeStep(step) {
         if(!this.completedSteps[step]) {
